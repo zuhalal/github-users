@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.githubusers.models.ListUserResponseItem
+import com.example.githubusers.models.UserResponseItem
 import com.example.githubusers.models.SearchUserResponse
 import com.example.githubusers.remote.RetrofitConfig
 import com.example.githubusers.utils.Event
@@ -13,8 +13,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class GithubUserViewModel: ViewModel() {
-    private val _listUserResponse = MutableLiveData<List<ListUserResponseItem>>()
-    val listUserResponse: LiveData<List<ListUserResponseItem>> = _listUserResponse
+    private val _listUserResponse = MutableLiveData<List<UserResponseItem>>()
+    val listUserResponse: LiveData<List<UserResponseItem>> = _listUserResponse
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -31,13 +31,13 @@ class GithubUserViewModel: ViewModel() {
         findAllUser()
     }
 
-    private fun findAllUser() {
+    fun findAllUser() {
         _isLoading.value = true
         val client = RetrofitConfig.getGithubApiService().getListUser()
-        client.enqueue(object : Callback<List<ListUserResponseItem>> {
+        client.enqueue(object : Callback<List<UserResponseItem>> {
             override fun onResponse(
-                call: Call<List<ListUserResponseItem>>,
-                response: Response<List<ListUserResponseItem>>
+                call: Call<List<UserResponseItem>>,
+                response: Response<List<UserResponseItem>>
             ) {
                 _isLoading.value = false
 
@@ -48,14 +48,14 @@ class GithubUserViewModel: ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<List<ListUserResponseItem>>, t: Throwable) {
+            override fun onFailure(call: Call<List<UserResponseItem>>, t: Throwable) {
                 _isLoading.value = false
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
         })
     }
 
-    private fun findUser(query: String) {
+    fun findUser(query: String) {
         _isLoading.value = true
         val client = RetrofitConfig.getGithubApiService().getSearchUser(query)
         client.enqueue(object : Callback<SearchUserResponse> {
@@ -65,9 +65,9 @@ class GithubUserViewModel: ViewModel() {
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
-//                    _restaurant.value = response.body()?.restaurant
-//                    _listReview.value = response.body()?.restaurant?.customerReviews
+                    _listUserResponse.value = response.body()?.items
                 } else {
+                    Log.e("AAAAAsdsad", "MASUKKKKKKKKKKKKk")
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }

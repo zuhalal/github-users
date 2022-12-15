@@ -8,14 +8,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.githubusers.models.ListUserResponseItem
+import com.example.githubusers.models.UserResponseItem
 
-class ListUserAdapter(private val listUser: List<ListUserResponseItem>):
+class ListUserAdapter(private val listUser: List<UserResponseItem>):
     RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListUserResponseItem, index: Int)
+        fun onItemClicked(data: UserResponseItem, index: Int)
     }
 
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -2,13 +2,7 @@ package com.example.githubusers.models
 
 import com.google.gson.annotations.SerializedName
 
-data class ListUserResponse(
-
-	@field:SerializedName("ListUserResponse")
-	val listUserResponse: List<ListUserResponseItem>
-)
-
-data class ListUserResponseItem(
+data class UserResponseItem(
 
 	@field:SerializedName("gists_url")
 	val gistsUrl: String,
