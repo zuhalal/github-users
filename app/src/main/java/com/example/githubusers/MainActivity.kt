@@ -1,15 +1,21 @@
 package com.example.githubusers
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.githubusers.databinding.ActivityMainBinding
+import com.example.githubusers.models.ListUserResponseItem
+import com.example.githubusers.viewmodels.GithubUserViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var rvUser: RecyclerView
-    private var list: ArrayList<User> = arrayListOf()
+
+    private lateinit var binding: ActivityMainBinding
+    private val githubUserViewModel by viewModels<GithubUserViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -17,26 +23,27 @@ class MainActivity : AppCompatActivity() {
         rvUser = findViewById(R.id.rv_user)
         rvUser.setHasFixedSize(true)
 
-        list.addAll(UserData.listData)
-        showRecyclerList()
+        githubUserViewModel.listUserResponse.observe(this){
+            listUserResponse -> setListUserData(listUserResponse)
+        }
     }
 
-    private fun showSelectedMusic(user: User) {
-        Toast.makeText(this, "Kamu memilih " + user.name, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showRecyclerList() {
+    private fun setListUserData(listUser: List<ListUserResponseItem>) {
         rvUser.layoutManager = LinearLayoutManager(this)
-        val listUserAdapter = ListUserAdapter(list)
+        val listUserAdapter = ListUserAdapter(listUser)
         rvUser.adapter = listUserAdapter
 
         listUserAdapter.setOnItemClickCallback(object: ListUserAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: User, index: Int) {
-                showSelectedMusic(data)
-                val intent = Intent(this@MainActivity, UserDetailActivity::class.java)
-                intent.putExtra(UserDetailActivity.EXTRA_USER, data)
-                startActivity(intent)
+            override fun onItemClicked(data: ListUserResponseItem, index: Int) {
+                showSelectedUser(data)
+//                val intent = Intent(this@MainActivity, UserDetailActivity::class.java)
+//                intent.putExtra(UserDetailActivity.EXTRA_USER, data)
+//                startActivity(intent)
             }
         })
+    }
+
+    private fun showSelectedUser(user: ListUserResponseItem) {
+        Toast.makeText(this, "Kamu memilih " + user.login, Toast.LENGTH_SHORT).show()
     }
 }

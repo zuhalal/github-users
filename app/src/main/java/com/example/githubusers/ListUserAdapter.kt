@@ -8,13 +8,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.githubusers.models.ListUserResponseItem
 
-class ListUserAdapter(private val listUser: ArrayList<User>):
+class ListUserAdapter(private val listUser: List<ListUserResponseItem>):
     RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: User, index: Int)
+        fun onItemClicked(data: ListUserResponseItem, index: Int)
     }
 
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -36,12 +37,13 @@ class ListUserAdapter(private val listUser: ArrayList<User>):
         val user = listUser[position]
 
         Glide.with(holder.itemView.context)
-            .load(user.avatar)
+            .load(user.avatarUrl)
             .apply(RequestOptions().override(55,55))
             .into(holder.imgPhoto)
 
-        holder.tvUsername.text = user.username
-        holder.tvName.text = user.name
+        holder.tvUsername.text = user.login
+        holder.tvName.text = user.htmlUrl
+
         holder.itemView.setOnClickListener {
             onItemClickCallback.onItemClicked(
                 listUser[holder.adapterPosition],
