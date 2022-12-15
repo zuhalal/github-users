@@ -4,12 +4,20 @@ package com.example.githubusers
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.viewModels
 import com.bumptech.glide.Glide
+import com.example.githubusers.databinding.ActivityUserDetailBinding
+import com.example.githubusers.models.UserDetail
+import com.example.githubusers.viewmodels.GithubUserViewModel
 
 class UserDetailActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityUserDetailBinding
+    private val githubUserViewModel by viewModels<GithubUserViewModel>()
+
     companion object {
         const val EXTRA_USER = "extra_user"
     }
@@ -18,17 +26,27 @@ class UserDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_detail)
 
-        val user = intent.getParcelableExtra<User>(EXTRA_USER) as User
+        binding = ActivityUserDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val image: ImageView = findViewById(R.id.iv_avatar)
-        Glide.with(this).load(user.avatar).into(image)
+        val userUrl = intent.getStringExtra(EXTRA_USER)
 
-        changeText(user);
+        githubUserViewModel.userDetail.observe(this) {
+            setUserDetailData(it)
+        }
 
-        val btn: Button = findViewById(R.id.btn_share)
+        githubUserViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
+
+        if (userUrl != null && userUrl !== "") {
+            githubUserViewModel.findUserByUrl(userUrl)
+        }
+
+        val btn: Button = binding.btnShare
         btn.setOnClickListener {
             val openURL = Intent(Intent.ACTION_SEND)
-            openURL.putExtra(Intent.EXTRA_TEXT, user.repository)
+            openURL.putExtra(Intent.EXTRA_TEXT, githubUserViewModel.userDetail.value?.reposUrl)
             openURL.type = "text/plain"
 
             val shareIntent = Intent.createChooser(openURL, null)
@@ -36,26 +54,33 @@ class UserDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeText(user: User) {
-        val name: TextView = findViewById(R.id.tv_name)
+    private fun setUserDetailData(user: UserDetail) {
+        val image: ImageView = binding.ivAvatar
+        Glide.with(this).load(user.avatarUrl).into(image)
+
+        val name: TextView = binding.tvName
         name.text = user.name
 
-        val username: TextView = findViewById(R.id.tv_username_detail)
-        username.text = user.username
+        val username: TextView = binding.tvUsernameDetail
+        username.text = user.htmlUrl
 
-        val company: TextView = findViewById(R.id.tv_company_detail)
-        company.text = user.company
+        val company: TextView = binding.tvCompanyDetail
+        company.text = user.company ?: "Tidak ada perusahaan"
 
-        val follower: TextView = findViewById(R.id.tv_follower_detail)
-        follower.text = user.follower.toString()
+        val follower: TextView = binding.tvFollowerDetail
+        follower.text = user.followers.toString()
 
-        val following: TextView = findViewById(R.id.tv_following_detail)
+        val following: TextView = binding.tvFollowingDetail
         following.text = user.following.toString()
 
-        val location: TextView = findViewById(R.id.tv_location_detail)
-        location.text = user.location
+        val location: TextView = binding.tvLocationDetail
+        location.text = user.location ?: "Tidak ada lokasi"
 
-        val repository: TextView = findViewById(R.id.tv_repository_detail)
-        repository.text = user.repository
+        val repository: TextView = binding.tvRepositoryDetail
+        repository.text = user.htmlUrl
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

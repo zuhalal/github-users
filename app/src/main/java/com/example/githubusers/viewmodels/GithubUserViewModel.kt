@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.githubusers.models.UserResponseItem
 import com.example.githubusers.models.SearchUserResponse
+import com.example.githubusers.models.UserDetail
 import com.example.githubusers.remote.RetrofitConfig
 import com.example.githubusers.utils.Event
 import retrofit2.Call
@@ -21,6 +22,9 @@ class GithubUserViewModel: ViewModel() {
 
     private val _snackbarText = MutableLiveData<Event<String>>()
     val snackbarText: LiveData<Event<String>> = _snackbarText
+
+    private val _userDetail = MutableLiveData<UserDetail>()
+    val userDetail: LiveData<UserDetail> = _userDetail
 
     companion object{
         private const val TAG = "GithubUserViewModel"
@@ -67,12 +71,35 @@ class GithubUserViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     _listUserResponse.value = response.body()?.items
                 } else {
-                    Log.e("AAAAAsdsad", "MASUKKKKKKKKKKKKk")
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<SearchUserResponse>, t: Throwable) {
+                _isLoading.value = false
+                Log.e(TAG, "onFailure: ${t.message.toString()}")
+            }
+        })
+    }
+
+    fun findUserByUrl(url: String) {
+        val username = url.split("https://api.github.com/users/")[1]
+        _isLoading.value = true
+        val client = RetrofitConfig.getGithubApiService().getUserDetail(username)
+        client.enqueue(object : Callback<UserDetail> {
+            override fun onResponse(
+                call: Call<UserDetail>,
+                response: Response<UserDetail>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    _userDetail.value = response.body()
+                } else {
+                    Log.e(TAG, "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<UserDetail>, t: Throwable) {
                 _isLoading.value = false
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }

@@ -1,9 +1,9 @@
 package com.example.githubusers
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -65,9 +65,9 @@ class MainActivity : AppCompatActivity() {
         listUserAdapter.setOnItemClickCallback(object: ListUserAdapter.OnItemClickCallback {
             override fun onItemClicked(data: UserResponseItem, index: Int) {
                 showSelectedUser(data)
-//                val intent = Intent(this@MainActivity, UserDetailActivity::class.java)
-//                intent.putExtra(UserDetailActivity.EXTRA_USER, data)
-//                startActivity(intent)
+                val intent = Intent(this@MainActivity, UserDetailActivity::class.java)
+                intent.putExtra(UserDetailActivity.EXTRA_USER, data.url)
+                startActivity(intent)
             }
         })
     }
