@@ -15,6 +15,17 @@
         android:layout_marginRight="12dp"
         tools:listitem="@layout/item_row_user" />
 
+    <TextView
+        android:id="@+id/not_found"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:gravity="center"
+        android:textColor="@color/design_default_color_error"
+        android:text="@string/tidak_ada_data"
+        android:visibility="gone"
+        />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"

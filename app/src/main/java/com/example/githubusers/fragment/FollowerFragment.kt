@@ -58,6 +58,8 @@ class FollowerFragment : Fragment() {
                 if (it.size > 3) {
                     binding.rvUserFollower.minimumHeight = 1000
                 }
+            } else {
+                showNotFoundMessage(true)
             }
         }
 
@@ -67,6 +69,8 @@ class FollowerFragment : Fragment() {
                 if (it.size > 3) {
                     binding.rvUserFollower.minimumHeight = 1000
                 }
+            } else {
+                showNotFoundMessage(true)
             }
         }
 
@@ -95,5 +99,9 @@ class FollowerFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         Log.d("LOADING: ", isLoading.toString())
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun showNotFoundMessage(show: Boolean) {
+        binding.notFound.visibility = if (show) View.VISIBLE else View.GONE
     }
 }
