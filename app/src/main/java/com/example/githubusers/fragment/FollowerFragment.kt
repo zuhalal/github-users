@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.githubusers.adapter.ListUserAdapter
 import com.example.githubusers.adapter.ListUserFragmentAdapter
 import com.example.githubusers.databinding.FragmentFollowerBinding
 import com.example.githubusers.models.UserResponseItem
@@ -44,18 +43,31 @@ class FollowerFragment : Fragment() {
         val index = arguments?.getInt(ARG_SECTION_NUMBER, 0)
         val username = arguments?.getString(ARG_USERNAME_URL)
 
-        if (username != null) {
-            Log.e("USERNAME: ", username)
-        }
-
-        Log.e("INDEX:", index.toString())
 
         if (username != null) {
-            githubUserViewModel.findAllUserFollower(username)
+            if (index == 0) {
+                githubUserViewModel.findAllUserFollower(username)
+            } else {
+                githubUserViewModel.findAllUserFollowing(username)
+            }
         }
 
-        githubUserViewModel.listUserResponse.observe(viewLifecycleOwner){
+        githubUserViewModel.listFollower.observe(viewLifecycleOwner){
             setListUserData(it)
+            if (it.isNotEmpty()) {
+                if (it.size > 3) {
+                    binding.rvUserFollower.minimumHeight = 1000
+                }
+            }
+        }
+
+        githubUserViewModel.listFollowing.observe(viewLifecycleOwner){
+            setListUserData(it)
+            if (it.isNotEmpty()) {
+                if (it.size > 3) {
+                    binding.rvUserFollower.minimumHeight = 1000
+                }
+            }
         }
 
         githubUserViewModel.isLoading.observe(viewLifecycleOwner) {

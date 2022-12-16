@@ -56,7 +56,7 @@ class UserDetailActivity : AppCompatActivity() {
         val btn: Button = binding.btnShare
         btn.setOnClickListener {
             val openURL = Intent(Intent.ACTION_SEND)
-            openURL.putExtra(Intent.EXTRA_TEXT, githubUserViewModel.userDetail.value?.reposUrl)
+            openURL.putExtra(Intent.EXTRA_TEXT, githubUserViewModel.userDetail.value?.htmlUrl)
             openURL.type = "text/plain"
 
             val shareIntent = Intent.createChooser(openURL, null)
@@ -65,7 +65,7 @@ class UserDetailActivity : AppCompatActivity() {
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
 
-        if (userUrl != null) {
+        if (userUrl != null && userUrl !== "") {
             sectionsPagerAdapter.usernameUrl = userUrl
         }
 

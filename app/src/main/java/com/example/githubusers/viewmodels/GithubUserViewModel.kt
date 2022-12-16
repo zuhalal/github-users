@@ -17,6 +17,12 @@ class GithubUserViewModel: ViewModel() {
     private val _listUserResponse = MutableLiveData<List<UserResponseItem>>()
     val listUserResponse: LiveData<List<UserResponseItem>> = _listUserResponse
 
+    private val _listFollower = MutableLiveData<List<UserResponseItem>>()
+    val listFollower: LiveData<List<UserResponseItem>> = _listFollower
+
+    private val _listFollowing = MutableLiveData<List<UserResponseItem>>()
+    val listFollowing: LiveData<List<UserResponseItem>> = _listFollowing
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -108,7 +114,6 @@ class GithubUserViewModel: ViewModel() {
 
     fun findAllUserFollower(url: String) {
         val username = url.split("https://api.github.com/users/")[1]
-        Log.e("ERRR:", username)
         _isLoading.value = true
         val client = RetrofitConfig.getGithubApiService().getListUserFollower(username)
         client.enqueue(object : Callback<List<UserResponseItem>> {
@@ -119,7 +124,7 @@ class GithubUserViewModel: ViewModel() {
                 _isLoading.value = false
 
                 if (response.isSuccessful) {
-                    _listUserResponse.value = response.body()
+                    _listFollower.value = response.body()
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
@@ -134,7 +139,6 @@ class GithubUserViewModel: ViewModel() {
 
     fun findAllUserFollowing(url: String) {
         val username = url.split("https://api.github.com/users/")[1]
-        Log.e("ERRR2:", username)
         _isLoading.value = true
         val client = RetrofitConfig.getGithubApiService().getListUserFollowing(username)
         client.enqueue(object : Callback<List<UserResponseItem>> {
@@ -145,7 +149,7 @@ class GithubUserViewModel: ViewModel() {
                 _isLoading.value = false
 
                 if (response.isSuccessful) {
-                    _listUserResponse.value = response.body()
+                    _listFollowing.value = response.body()
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
