@@ -8,7 +8,6 @@ import com.example.githubusers.models.UserResponseItem
 import com.example.githubusers.models.SearchUserResponse
 import com.example.githubusers.models.UserDetail
 import com.example.githubusers.remote.RetrofitConfig
-import com.example.githubusers.utils.Event
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,9 +24,6 @@ class GithubUserViewModel: ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
-
-    private val _snackbarText = MutableLiveData<Event<String>>()
-    val snackbarText: LiveData<Event<String>> = _snackbarText
 
     private val _userDetail = MutableLiveData<UserDetail>()
     val userDetail: LiveData<UserDetail> = _userDetail
