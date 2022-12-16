@@ -12,4 +12,6 @@
     <string name="company">Company</string>
     <string name="location">Location</string>
     <string name="data_user_tidak_berhasil_ditemukan_silahkan_gunakan_kata_kunci_lain">Data user tidak berhasil ditemukan. Silahkan gunakan kata kunci lain</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

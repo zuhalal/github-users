@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.githubusers.adapter.ListUserAdapter
 import com.example.githubusers.databinding.ActivityMainBinding
 import com.example.githubusers.models.UserResponseItem
 import com.example.githubusers.viewmodels.GithubUserViewModel
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        rvUser = findViewById(R.id.rv_user)
+        rvUser = binding.rvUser
         rvUser.setHasFixedSize(true)
 
         githubUserViewModel.isLoading.observe(this) {

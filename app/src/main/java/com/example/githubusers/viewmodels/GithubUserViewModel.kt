@@ -105,4 +105,56 @@ class GithubUserViewModel: ViewModel() {
             }
         })
     }
+
+    fun findAllUserFollower(url: String) {
+        val username = url.split("https://api.github.com/users/")[1]
+        Log.e("ERRR:", username)
+        _isLoading.value = true
+        val client = RetrofitConfig.getGithubApiService().getListUserFollower(username)
+        client.enqueue(object : Callback<List<UserResponseItem>> {
+            override fun onResponse(
+                call: Call<List<UserResponseItem>>,
+                response: Response<List<UserResponseItem>>
+            ) {
+                _isLoading.value = false
+
+                if (response.isSuccessful) {
+                    _listUserResponse.value = response.body()
+                } else {
+                    Log.e(TAG, "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<UserResponseItem>>, t: Throwable) {
+                _isLoading.value = false
+                Log.e(TAG, "onFailure: ${t.message.toString()}")
+            }
+        })
+    }
+
+    fun findAllUserFollowing(url: String) {
+        val username = url.split("https://api.github.com/users/")[1]
+        Log.e("ERRR2:", username)
+        _isLoading.value = true
+        val client = RetrofitConfig.getGithubApiService().getListUserFollowing(username)
+        client.enqueue(object : Callback<List<UserResponseItem>> {
+            override fun onResponse(
+                call: Call<List<UserResponseItem>>,
+                response: Response<List<UserResponseItem>>
+            ) {
+                _isLoading.value = false
+
+                if (response.isSuccessful) {
+                    _listUserResponse.value = response.body()
+                } else {
+                    Log.e(TAG, "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<UserResponseItem>>, t: Throwable) {
+                _isLoading.value = false
+                Log.e(TAG, "onFailure: ${t.message.toString()}")
+            }
+        })
+    }
 }

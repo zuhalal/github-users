@@ -9,10 +9,15 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.githubusers.adapter.SectionsPagerAdapter
 import com.example.githubusers.databinding.ActivityUserDetailBinding
 import com.example.githubusers.models.UserDetail
 import com.example.githubusers.viewmodels.GithubUserViewModel
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class UserDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserDetailBinding
@@ -20,6 +25,11 @@ class UserDetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_USER = "extra_user"
+        @StringRes
+        private val TAB_TITLES = intArrayOf(
+            R.string.follower,
+            R.string.following
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +62,22 @@ class UserDetailActivity : AppCompatActivity() {
             val shareIntent = Intent.createChooser(openURL, null)
             startActivity(shareIntent)
         }
+
+        val sectionsPagerAdapter = SectionsPagerAdapter(this)
+
+        if (userUrl != null) {
+            sectionsPagerAdapter.usernameUrl = userUrl
+        }
+
+        val viewPager: ViewPager2 = binding.viewPager
+        viewPager.adapter = sectionsPagerAdapter
+
+        val tabs: TabLayout = binding.tabs
+
+        TabLayoutMediator(tabs, viewPager) { tab, position ->
+            tab.text = resources.getString(TAB_TITLES[position])
+        }.attach()
+        supportActionBar?.elevation = 0f
     }
 
     private fun setUserDetailData(user: UserDetail) {

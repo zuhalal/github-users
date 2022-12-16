@@ -1,4 +1,4 @@
-package com.example.githubusers
+package com.example.githubusers.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.githubusers.R
 import com.example.githubusers.models.UserResponseItem
 
 class ListUserAdapter(private val listUser: List<UserResponseItem>):
@@ -40,7 +41,6 @@ class ListUserAdapter(private val listUser: List<UserResponseItem>):
             .load(user.avatarUrl)
             .apply(RequestOptions().override(55,55))
             .into(holder.imgPhoto)
-
         holder.tvUsername.text = user.login
         holder.tvName.text = user.htmlUrl
 
