@@ -9,7 +9,7 @@
     tools:context=".UserDetailActivity">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/white"
         >
@@ -37,7 +37,8 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/green"
+            android:textColor="@color/purple_700"
+            android:textStyle="bold"
             android:text="@string/nama_upper_case"
             android:layout_gravity="center_horizontal"
             android:textSize="28sp"
@@ -156,7 +157,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Repository"
+                    android:text="@string/repository"
                     android:textColor="@color/black"
                     android:layout_marginEnd="16dp"
                     />

@@ -1,7 +1,6 @@
 package com.example.githubusers.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -92,12 +91,11 @@ class FollowerFragment : Fragment() {
     }
 
     private fun showSelectedUser(user: UserResponseItem) {
-        Toast.makeText(activity, "Follower dengan username: " + user.login, Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, "Follower with username: " + user.login, Toast.LENGTH_SHORT).show()
     }
 
 
     private fun showLoading(isLoading: Boolean) {
-        Log.d("LOADING: ", isLoading.toString())
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 

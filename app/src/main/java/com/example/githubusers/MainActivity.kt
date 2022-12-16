@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showSelectedUser(user: UserResponseItem) {
-        Toast.makeText(this, "Kamu memilih " + user.login, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "You choose " + user.login, Toast.LENGTH_SHORT).show()
     }
 
     private fun showLoading(isLoading: Boolean) {

@@ -91,7 +91,7 @@ class UserDetailActivity : AppCompatActivity() {
         username.text = user.htmlUrl
 
         val company: TextView = binding.tvCompanyDetail
-        company.text = user.company ?: "Tidak ada perusahaan"
+        company.text = user.company ?: "-"
 
         val follower: TextView = binding.tvFollowerDetail
         follower.text = user.followers.toString()
@@ -100,7 +100,7 @@ class UserDetailActivity : AppCompatActivity() {
         following.text = user.following.toString()
 
         val location: TextView = binding.tvLocationDetail
-        location.text = user.location ?: "Tidak ada lokasi"
+        location.text = user.location ?: "-"
 
         val repository: TextView = binding.tvRepositoryDetail
         repository.text = user.htmlUrl
