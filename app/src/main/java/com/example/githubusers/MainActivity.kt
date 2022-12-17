@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
             override fun onItemClicked(data: UserResponseItem, index: Int) {
                 showSelectedUser(data)
                 val intent = Intent(this@MainActivity, UserDetailActivity::class.java)
-                intent.putExtra(UserDetailActivity.EXTRA_USER, data.url)
+                intent.putExtra(UserDetailActivity.EXTRA_USER, data)
                 startActivity(intent)
             }
         })

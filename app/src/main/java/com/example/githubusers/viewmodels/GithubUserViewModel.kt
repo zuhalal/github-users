@@ -32,7 +32,6 @@ class GithubUserViewModel: ViewModel() {
         private const val TAG = "GithubUserViewModel"
     }
 
-
     init {
         findAllUser()
     }

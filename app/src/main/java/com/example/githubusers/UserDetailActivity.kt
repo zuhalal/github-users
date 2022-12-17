@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.githubusers.adapter.SectionsPagerAdapter
 import com.example.githubusers.databinding.ActivityUserDetailBinding
 import com.example.githubusers.models.UserDetail
+import com.example.githubusers.models.UserResponseItem
 import com.example.githubusers.viewmodels.GithubUserViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -39,7 +40,13 @@ class UserDetailActivity : AppCompatActivity() {
         binding = ActivityUserDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val userUrl = intent.getStringExtra(EXTRA_USER)
+        val user = intent.getParcelableExtra<UserResponseItem>(EXTRA_USER)
+
+        val userUrl = user?.url
+
+        if (userUrl != null) {
+            githubUserViewModel.findUserByUrl(userUrl)
+        }
 
         githubUserViewModel.userDetail.observe(this) {
             setUserDetailData(it)
@@ -47,10 +54,6 @@ class UserDetailActivity : AppCompatActivity() {
 
         githubUserViewModel.isLoading.observe(this) {
             showLoading(it)
-        }
-
-        if (userUrl != null && userUrl !== "") {
-            githubUserViewModel.findUserByUrl(userUrl)
         }
 
         val btn: Button = binding.btnShare
