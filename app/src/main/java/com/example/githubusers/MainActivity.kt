@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        githubUserViewModel.listUserResponse.observe(this){
+        githubUserViewModel.listUserResponse.observe(this) {
             setListUserData(it)
 
             if (githubUserViewModel.listUserResponse.value?.isEmpty() == true) {
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         val listUserAdapter = ListUserAdapter(listUser)
         rvUser.adapter = listUserAdapter
 
-        listUserAdapter.setOnItemClickCallback(object: ListUserAdapter.OnItemClickCallback {
+        listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
             override fun onItemClicked(data: UserResponseItem, index: Int) {
                 showSelectedUser(data)
                 val intent = Intent(this@MainActivity, UserDetailActivity::class.java)

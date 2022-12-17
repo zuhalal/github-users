@@ -10,7 +10,7 @@ class SectionsPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(a
     var usernameUrl: String = ""
 
     override fun createFragment(position: Int): Fragment {
-        var fragment: Fragment = FollowerFragment()
+        val fragment: Fragment = FollowerFragment()
 
         fragment.arguments = Bundle().apply {
             putInt(FollowerFragment.ARG_SECTION_NUMBER, position)

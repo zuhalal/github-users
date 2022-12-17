@@ -47,7 +47,7 @@ class FollowerFragment : Fragment() {
             }
         }
 
-        githubUserViewModel.listFollower.observe(viewLifecycleOwner){
+        githubUserViewModel.listFollower.observe(viewLifecycleOwner) {
             setListUserData(it)
             if (it.isNotEmpty()) {
                 if (it.size > 3) {
@@ -58,7 +58,7 @@ class FollowerFragment : Fragment() {
             }
         }
 
-        githubUserViewModel.listFollowing.observe(viewLifecycleOwner){
+        githubUserViewModel.listFollowing.observe(viewLifecycleOwner) {
             setListUserData(it)
             if (it.isNotEmpty()) {
                 if (it.size > 3) {
@@ -76,10 +76,11 @@ class FollowerFragment : Fragment() {
 
     private fun setListUserData(listUser: List<UserResponseItem>) {
         rvUser.layoutManager = LinearLayoutManager(requireContext())
-        val listUserAdapter = ListUserFragmentAdapter(requireContext(),listUser)
+        val listUserAdapter = ListUserFragmentAdapter(listUser)
         rvUser.adapter = listUserAdapter
 
-        listUserAdapter.setOnItemClickCallback(object: ListUserFragmentAdapter.OnItemClickCallback {
+        listUserAdapter.setOnItemClickCallback(object :
+            ListUserFragmentAdapter.OnItemClickCallback {
             override fun onItemClicked(data: UserResponseItem, index: Int) {
                 showSelectedUser(data)
             }
@@ -87,7 +88,8 @@ class FollowerFragment : Fragment() {
     }
 
     private fun showSelectedUser(user: UserResponseItem) {
-        Toast.makeText(activity, "${R.string.selected_user} ${user.login}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, "${R.string.selected_user} ${user.login}", Toast.LENGTH_SHORT)
+            .show()
     }
 
 

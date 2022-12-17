@@ -9,7 +9,7 @@ import com.example.githubusers.databinding.ItemRowUserBinding
 import com.example.githubusers.extensions.loadImage
 import com.example.githubusers.models.UserResponseItem
 
-class ListUserAdapter(private val listUser: List<UserResponseItem>):
+class ListUserAdapter(private val listUser: List<UserResponseItem>) :
     RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
     private lateinit var onItemClickCallback: OnItemClickCallback
 

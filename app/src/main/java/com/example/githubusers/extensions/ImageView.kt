@@ -7,6 +7,6 @@ import com.bumptech.glide.request.RequestOptions
 fun ImageView.loadImage(url: String?) {
     Glide.with(this.context)
         .load(url)
-        .apply(RequestOptions().override(55,55))
+        .apply(RequestOptions().override(55, 55))
         .into(this)
 }

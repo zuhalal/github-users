@@ -12,7 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class GithubUserViewModel: ViewModel() {
+class GithubUserViewModel : ViewModel() {
     private val _listUserResponse = MutableLiveData<List<UserResponseItem>>()
     val listUserResponse: LiveData<List<UserResponseItem>> = _listUserResponse
 
@@ -28,7 +28,7 @@ class GithubUserViewModel: ViewModel() {
     private val _userDetail = MutableLiveData<UserDetail>()
     val userDetail: LiveData<UserDetail> = _userDetail
 
-    companion object{
+    companion object {
         private const val TAG = "GithubUserViewModel"
     }
 

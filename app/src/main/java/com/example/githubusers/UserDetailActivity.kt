@@ -1,4 +1,3 @@
-
 package com.example.githubusers
 
 import android.content.Intent
@@ -92,10 +91,10 @@ class UserDetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_USER = "extra_user"
+
         @StringRes
         private val TAB_TITLES = intArrayOf(
-            R.string.follower,
-            R.string.following
+            R.string.follower, R.string.following
         )
     }
 }

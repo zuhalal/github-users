@@ -1,6 +1,5 @@
 package com.example.githubusers.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -10,7 +9,9 @@ import com.example.githubusers.databinding.ItemRowUserBinding
 import com.example.githubusers.models.UserResponseItem
 import com.example.githubusers.extensions.loadImage
 
-class ListUserFragmentAdapter(private val context: Context, private val listUser: List<UserResponseItem>):
+class ListUserFragmentAdapter(
+    private val listUser: List<UserResponseItem>
+) :
     RecyclerView.Adapter<ListUserFragmentAdapter.ListViewHolder>() {
     private lateinit var onItemClickCallback: OnItemClickCallback
 
