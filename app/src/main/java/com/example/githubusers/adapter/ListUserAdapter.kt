@@ -1,14 +1,12 @@
 package com.example.githubusers.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.example.githubusers.R
+import com.example.githubusers.databinding.ItemRowUserBinding
+import com.example.githubusers.extensions.loadImage
 import com.example.githubusers.models.UserResponseItem
 
 class ListUserAdapter(private val listUser: List<UserResponseItem>):
@@ -19,10 +17,10 @@ class ListUserAdapter(private val listUser: List<UserResponseItem>):
         fun onItemClicked(data: UserResponseItem, index: Int)
     }
 
-    class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var tvUsername: TextView = itemView.findViewById(R.id.tv_username)
-        var tvName: TextView = itemView.findViewById(R.id.tv_name)
-        var imgPhoto: ImageView = itemView.findViewById(R.id.img_item_photo)
+    class ListViewHolder(itemView: ItemRowUserBinding) : RecyclerView.ViewHolder(itemView.root) {
+        var tvUsername: TextView = itemView.tvUsername
+        var tvName: TextView = itemView.tvName
+        var imgPhoto: ImageView = itemView.imgItemPhoto
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
@@ -30,17 +28,15 @@ class ListUserAdapter(private val listUser: List<UserResponseItem>):
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_row_user, parent,false)
-        return ListViewHolder(view)
+        val binding = ItemRowUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ListViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val user = listUser[position]
 
-        Glide.with(holder.itemView.context)
-            .load(user.avatarUrl)
-            .apply(RequestOptions().override(55,55))
-            .into(holder.imgPhoto)
+        holder.imgPhoto.loadImage(user.avatarUrl)
+
         holder.tvUsername.text = user.login
         holder.tvName.text = user.htmlUrl
 

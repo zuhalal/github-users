@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.viewpager2.widget.ViewPager2
@@ -23,15 +21,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 class UserDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserDetailBinding
     private val githubUserViewModel by viewModels<GithubUserViewModel>()
-
-    companion object {
-        const val EXTRA_USER = "extra_user"
-        @StringRes
-        private val TAB_TITLES = intArrayOf(
-            R.string.follower,
-            R.string.following
-        )
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,32 +73,29 @@ class UserDetailActivity : AppCompatActivity() {
     }
 
     private fun setUserDetailData(user: UserDetail) {
-        val image: ImageView = binding.ivAvatar
-        Glide.with(this).load(user.avatarUrl).into(image)
+        binding.apply {
+            Glide.with(applicationContext).load(user.avatarUrl).into(ivAvatar)
 
-        val name: TextView = binding.tvName
-        name.text = user.name
-
-        val username: TextView = binding.tvUsernameDetail
-        username.text = user.htmlUrl
-
-        val company: TextView = binding.tvCompanyDetail
-        company.text = user.company ?: "-"
-
-        val follower: TextView = binding.tvFollowerDetail
-        follower.text = user.followers.toString()
-
-        val following: TextView = binding.tvFollowingDetail
-        following.text = user.following.toString()
-
-        val location: TextView = binding.tvLocationDetail
-        location.text = user.location ?: "-"
-
-        val repository: TextView = binding.tvRepositoryDetail
-        repository.text = user.htmlUrl
+            tvName.text = user.name
+            tvUsernameDetail.text = user.login
+            tvCompanyDetail.text = user.company ?: "-"
+            tvFollowerDetail.text = user.followers.toString()
+            tvFollowingDetail.text = user.following.toString()
+            tvLocationDetail.text = user.location ?: "-"
+            tvRepositoryDetail.text = user.htmlUrl
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    companion object {
+        const val EXTRA_USER = "extra_user"
+        @StringRes
+        private val TAB_TITLES = intArrayOf(
+            R.string.follower,
+            R.string.following
+        )
     }
 }

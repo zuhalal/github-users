@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.githubusers.R
 import com.example.githubusers.adapter.ListUserFragmentAdapter
 import com.example.githubusers.databinding.FragmentFollowerBinding
 import com.example.githubusers.models.UserResponseItem
@@ -19,11 +20,6 @@ class FollowerFragment : Fragment() {
 
     private lateinit var binding: FragmentFollowerBinding
     private val githubUserViewModel by viewModels<GithubUserViewModel>()
-
-    companion object {
-        const val ARG_SECTION_NUMBER = "section_number"
-        const val ARG_USERNAME_URL = "username_url"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,7 +87,7 @@ class FollowerFragment : Fragment() {
     }
 
     private fun showSelectedUser(user: UserResponseItem) {
-        Toast.makeText(activity, "Follower with username: " + user.login, Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, "${R.string.selected_user} ${user.login}", Toast.LENGTH_SHORT).show()
     }
 
 
@@ -101,5 +97,10 @@ class FollowerFragment : Fragment() {
 
     private fun showNotFoundMessage(show: Boolean) {
         binding.notFound.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    companion object {
+        const val ARG_SECTION_NUMBER = "section_number"
+        const val ARG_USERNAME_URL = "username_url"
     }
 }

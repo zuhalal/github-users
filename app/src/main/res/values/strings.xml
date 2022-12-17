@@ -16,4 +16,6 @@
     <string name="search_for_username">Search for username</string>
     <string name="tidak_ada_data">Tidak ada data</string>
     <string name="repository">Repository</string>
+    <string name="search">Search</string>
+    <string name="selected_user">Follower with username: </string>
 </resources>
