@@ -41,9 +41,13 @@ class FollowerFragment : Fragment() {
 
         if (username != null) {
             if (index == 0) {
-                githubUserViewModel.findAllUserFollower(username)
+                if (githubUserViewModel.listFollower.value == null) {
+                    githubUserViewModel.findAllUserFollower(username)
+                }
             } else {
-                githubUserViewModel.findAllUserFollowing(username)
+                if (githubUserViewModel.listFollowing.value == null) {
+                    githubUserViewModel.findAllUserFollowing(username)
+                }
             }
         }
 

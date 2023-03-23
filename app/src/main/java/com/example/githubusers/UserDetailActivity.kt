@@ -33,7 +33,9 @@ class UserDetailActivity : AppCompatActivity() {
         val userUrl = user?.url
 
         if (userUrl != null) {
-            githubUserViewModel.findUserByUrl(userUrl)
+            if (githubUserViewModel.userDetail.value == null) {
+                githubUserViewModel.findUserByUrl(userUrl)
+            }
         }
 
         githubUserViewModel.userDetail.observe(this) {
