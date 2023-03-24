@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,12 +15,12 @@ import com.example.githubusers.adapter.ListUserFragmentAdapter
 import com.example.githubusers.databinding.FragmentFollowerBinding
 import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.viewmodels.GithubUserViewModel
+import com.example.githubusers.viewmodels.ViewModelFactory
 
 class FollowerFragment : Fragment() {
     private lateinit var rvUser: RecyclerView
 
     private lateinit var binding: FragmentFollowerBinding
-    private val githubUserViewModel by viewModels<GithubUserViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +32,9 @@ class FollowerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(requireActivity())
+        val githubUserViewModel: GithubUserViewModel by viewModels { factory }
 
         rvUser = binding.rvUserFollower
         rvUser.setHasFixedSize(true)

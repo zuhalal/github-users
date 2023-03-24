@@ -21,7 +21,4 @@ data class FavoriteUserEntity  (
 
     @ColumnInfo(name="html_url")
     val htmlUrl: String,
-
-    @ColumnInfo(name="is_favorite")
-    var isFavorite: Boolean,
 ): Parcelable

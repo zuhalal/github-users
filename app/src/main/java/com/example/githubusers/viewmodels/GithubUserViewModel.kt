@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.githubusers.data.GithubUserRepository
 import com.example.githubusers.data.remote.models.UserResponseItem
-import com.example.githubusers.data.remote.models.SearchUserResponse
 import com.example.githubusers.data.remote.models.UserDetail
 import com.example.githubusers.data.remote.retrofit.RetrofitConfig
 import retrofit2.Call
@@ -14,9 +13,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class GithubUserViewModel(private val repository: GithubUserRepository) : ViewModel() {
-    private val _listUserResponse = MutableLiveData<List<UserResponseItem>>()
-    val listUserResponse: LiveData<List<UserResponseItem>> = _listUserResponse
-
     private val _listFollower = MutableLiveData<List<UserResponseItem>>()
     val listFollower: LiveData<List<UserResponseItem>> = _listFollower
 
@@ -26,61 +22,15 @@ class GithubUserViewModel(private val repository: GithubUserRepository) : ViewMo
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _userDetail = MutableLiveData<UserDetail>()
-    val userDetail: LiveData<UserDetail> = _userDetail
-
     companion object {
         private const val TAG = "GithubUserViewModel"
     }
 
     fun findAllUser() = repository.getListUsers()
 
-    fun findUser(query: String) {
-        _isLoading.value = true
-        val client = RetrofitConfig.getGithubApiService().getSearchUser(query)
-        client.enqueue(object : Callback<SearchUserResponse> {
-            override fun onResponse(
-                call: Call<SearchUserResponse>,
-                response: Response<SearchUserResponse>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _listUserResponse.value = response.body()?.items
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
+    fun findUser(query: String) = repository.findUser(query)
 
-            override fun onFailure(call: Call<SearchUserResponse>, t: Throwable) {
-                _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
-            }
-        })
-    }
-
-    fun findUserByUrl(url: String) {
-        val username = url.split("https://api.github.com/users/")[1]
-        _isLoading.value = true
-        val client = RetrofitConfig.getGithubApiService().getUserDetail(username)
-        client.enqueue(object : Callback<UserDetail> {
-            override fun onResponse(
-                call: Call<UserDetail>,
-                response: Response<UserDetail>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _userDetail.value = response.body()
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<UserDetail>, t: Throwable) {
-                _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
-            }
-        })
-    }
+    fun findUserByUrl(url: String) = repository.findUserByUrl(url)
 
     fun findAllUserFollower(url: String) {
         val username = url.split("https://api.github.com/users/")[1]

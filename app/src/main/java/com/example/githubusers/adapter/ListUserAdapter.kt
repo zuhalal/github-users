@@ -5,16 +5,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.githubusers.data.local.entity.FavoriteUserEntity
+import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.databinding.ItemRowUserBinding
 import com.example.githubusers.extensions.loadImage
 
-class ListUserAdapter(private val listUser: List<FavoriteUserEntity>) :
+class ListUserAdapter(private val listUser: List<UserResponseItem>) :
     RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: FavoriteUserEntity, index: Int)
+        fun onItemClicked(data: UserResponseItem, index: Int)
     }
 
     class ListViewHolder(itemView: ItemRowUserBinding) : RecyclerView.ViewHolder(itemView.root) {
@@ -37,7 +37,7 @@ class ListUserAdapter(private val listUser: List<FavoriteUserEntity>) :
 
         holder.imgPhoto.loadImage(user.avatarUrl)
 
-        holder.tvUsername.text = user.username
+        holder.tvUsername.text = user.login
         holder.tvName.text = user.htmlUrl
 
         holder.itemView.setOnClickListener {

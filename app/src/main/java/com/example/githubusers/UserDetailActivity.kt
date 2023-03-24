@@ -5,21 +5,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.githubusers.adapter.SectionsPagerAdapter
+import com.example.githubusers.data.Result
 import com.example.githubusers.databinding.ActivityUserDetailBinding
 import com.example.githubusers.data.remote.models.UserDetail
 import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.viewmodels.GithubUserViewModel
+import com.example.githubusers.viewmodels.ViewModelFactory
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class UserDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserDetailBinding
-    private val githubUserViewModel by viewModels<GithubUserViewModel>()
+    private lateinit var repoUrl: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,19 +31,45 @@ class UserDetailActivity : AppCompatActivity() {
         binding = ActivityUserDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
+        val githubUserViewModel: GithubUserViewModel by viewModels { factory }
+
         val user = intent.getParcelableExtra<UserResponseItem>(EXTRA_USER)
 
         val userUrl = user?.url
 
         if (userUrl != null) {
-            if (githubUserViewModel.userDetail.value == null) {
-                githubUserViewModel.findUserByUrl(userUrl)
-            }
+//            if (githubUserViewModel.findUserByUrl(userUrl).value == null) {
+//
+//            }
+
+            githubUserViewModel.findUserByUrl(userUrl).observe(this) { result ->
+                if (result != null) {
+                    when (result) {
+                        is Result.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                        }
+                        is Result.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            val newsData = result.data
+                            repoUrl = result.data.htmlUrl ?: ""
+                            setUserDetailData(newsData)
+                        }
+                        is Result.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(
+                                this,
+                                "Terjadi kesalahan" + result.error,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
         }
 
-        githubUserViewModel.userDetail.observe(this) {
-            setUserDetailData(it)
-        }
+//        githubUserViewModel.userDetail.observe(this) {
+//            setUserDetailData(it)
+//        }
 
         githubUserViewModel.isLoading.observe(this) {
             showLoading(it)
@@ -49,7 +78,7 @@ class UserDetailActivity : AppCompatActivity() {
         val btn: Button = binding.btnShare
         btn.setOnClickListener {
             val openURL = Intent(Intent.ACTION_SEND)
-            openURL.putExtra(Intent.EXTRA_TEXT, githubUserViewModel.userDetail.value?.htmlUrl)
+            openURL.putExtra(Intent.EXTRA_TEXT, repoUrl)
             openURL.type = "text/plain"
 
             val shareIntent = Intent.createChooser(openURL, null)
@@ -58,7 +87,7 @@ class UserDetailActivity : AppCompatActivity() {
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
 
-        if (userUrl != null && userUrl !== "") {
+        if (userUrl !== "") {
             sectionsPagerAdapter.usernameUrl = userUrl
         }
 
@@ -71,6 +100,7 @@ class UserDetailActivity : AppCompatActivity() {
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
         supportActionBar?.elevation = 0f
+        }
     }
 
     private fun setUserDetailData(user: UserDetail) {
