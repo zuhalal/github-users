@@ -21,6 +21,7 @@ class GithubUserRepository private constructor (
     private val result = MediatorLiveData<Result<List<FavoriteUserEntity>>>()
     private val apiResult = MediatorLiveData<Result<List<UserResponseItem>>>()
     private val userDetail = MediatorLiveData<Result<UserDetail>>()
+    private val userFavorited = MediatorLiveData<Result<FavoriteUserEntity>>()
 
     fun getListUsers(): LiveData<Result<List<UserResponseItem>>> {
         apiResult.value = Result.Loading
@@ -49,10 +50,7 @@ class GithubUserRepository private constructor (
                 apiResult.value = Result.Error(t.message.toString())
             }
         })
-//        val localData = favoriteUserDao.getUsers()
-//        result.addSource(localData) { newData: List<FavoriteUserEntity> ->
-//            result.value = Result.Success(newData)
-//        }
+
         return apiResult
     }
 
@@ -99,13 +97,31 @@ class GithubUserRepository private constructor (
         return userDetail
     }
 
-    fun getFavoriteUser(): LiveData<List<FavoriteUserEntity>> {
-        return favoriteUserDao.getFavoriteUsers()
+    fun getFavoriteUser(): LiveData<Result<List<FavoriteUserEntity>>> {
+        val localData = favoriteUserDao.getFavoriteUsers()
+        result.addSource(localData) { newData: List<FavoriteUserEntity> ->
+            result.value = Result.Success(newData)
+        }
+        return result
+    }
+
+    fun isFavorited(username: String): LiveData<Result<FavoriteUserEntity>> {
+        val localData = favoriteUserDao.getOneFavoriteUser(username)
+        userFavorited.addSource(localData) { newData ->
+            userFavorited.value = Result.Success(newData)
+        }
+        return userFavorited
     }
 
     fun setFavoriteUser(user: FavoriteUserEntity) {
         appExecutors.diskIO.execute {
             favoriteUserDao.insertOneFavoriteUser(user)
+        }
+    }
+
+    fun removeFavoriteUser(username: String) {
+        appExecutors.diskIO.execute {
+            favoriteUserDao.deleteFavoritedUser(username)
         }
     }
 

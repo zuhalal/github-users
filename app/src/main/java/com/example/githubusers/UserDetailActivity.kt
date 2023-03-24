@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.githubusers.adapter.SectionsPagerAdapter
 import com.example.githubusers.data.Result
+import com.example.githubusers.data.local.entity.FavoriteUserEntity
 import com.example.githubusers.databinding.ActivityUserDetailBinding
 import com.example.githubusers.data.remote.models.UserDetail
 import com.example.githubusers.data.remote.models.UserResponseItem
@@ -22,7 +23,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class UserDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserDetailBinding
-    private lateinit var repoUrl: String
+    private lateinit var userDetail: UserDetail
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +38,7 @@ class UserDetailActivity : AppCompatActivity() {
         val user = intent.getParcelableExtra<UserResponseItem>(EXTRA_USER)
 
         val userUrl = user?.url
+        var isFavorited = false
 
         if (userUrl != null) {
 //            if (githubUserViewModel.findUserByUrl(userUrl).value == null) {
@@ -52,7 +54,7 @@ class UserDetailActivity : AppCompatActivity() {
                         is Result.Success -> {
                             binding.progressBar.visibility = View.GONE
                             val newsData = result.data
-                            repoUrl = result.data.htmlUrl ?: ""
+                            userDetail = newsData
                             setUserDetailData(newsData)
                         }
                         is Result.Error -> {
@@ -71,18 +73,65 @@ class UserDetailActivity : AppCompatActivity() {
 //            setUserDetailData(it)
 //        }
 
+        val btnFav: Button = binding.btnFavorite
+
         githubUserViewModel.isLoading.observe(this) {
             showLoading(it)
+        }
+
+        githubUserViewModel.findAllFavoriteUser().observe(this) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is Result.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        val newsData = result.data
+                        isFavorited = newsData.find{it.username == user.login}?.username !== null
+
+                        if (!isFavorited) {
+                            btnFav.text = getString(R.string.favorite_this_user)
+                        } else {
+                            btnFav.text = getString(R.string.unfavorite_this_user)
+                        }
+                    }
+                    is Result.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(
+                            this,
+                            "Terjadi kesalahan" + result.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
 
         val btn: Button = binding.btnShare
         btn.setOnClickListener {
             val openURL = Intent(Intent.ACTION_SEND)
-            openURL.putExtra(Intent.EXTRA_TEXT, repoUrl)
+            openURL.putExtra(Intent.EXTRA_TEXT, userDetail.htmlUrl)
             openURL.type = "text/plain"
 
             val shareIntent = Intent.createChooser(openURL, null)
             startActivity(shareIntent)
+        }
+
+
+        btnFav.setOnClickListener {
+            if (!isFavorited) {
+                githubUserViewModel.setFavoriteUser(
+                    FavoriteUserEntity(
+                        user.login,
+                        user.url,
+                        user.htmlUrl,
+                        user.htmlUrl
+                    )
+                )
+            } else {
+                githubUserViewModel.deleteFavoriteUser(user.login)
+            }
         }
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this)

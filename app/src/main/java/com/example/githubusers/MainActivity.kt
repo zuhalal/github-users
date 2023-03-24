@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun showNotFoundMessage(show: Boolean) {
-        binding.notFound.visibility = if (show) View.VISIBLE else View.GONE
-    }
+//    private fun showNotFoundMessage(show: Boolean) {
+//        binding.notFound.visibility = if (show) View.VISIBLE else View.GONE
+//    }
 }

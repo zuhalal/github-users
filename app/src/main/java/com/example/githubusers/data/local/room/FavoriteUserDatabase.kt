@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.githubusers.data.local.entity.FavoriteUserEntity
 
-@Database(entities = [FavoriteUserEntity::class], version = 1, exportSchema = false)
+@Database(entities = [FavoriteUserEntity::class], version = 2, exportSchema = false)
 abstract class FavoriteUserDatabase : RoomDatabase() {
     abstract fun favoriteUserDao(): FavoriteUserDao
 
@@ -18,7 +18,7 @@ abstract class FavoriteUserDatabase : RoomDatabase() {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     FavoriteUserDatabase::class.java, "FavoriteUser.db"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
             }
     }
 }

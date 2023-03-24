@@ -183,6 +183,16 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             />
+        <Button
+            android:id="@+id/btn_favorite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/favorite_this_account"
+            android:backgroundTint="@color/purple_500"
+            android:textColor="@color/white"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            />
         <Space
             android:layout_width="match_parent"
             android:layout_height="40dp" />

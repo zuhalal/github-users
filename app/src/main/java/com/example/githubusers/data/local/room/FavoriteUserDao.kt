@@ -7,10 +7,10 @@ import com.example.githubusers.data.local.entity.FavoriteUserEntity
 @Dao
 interface FavoriteUserDao {
     @Query("SELECT * FROM favorite_user")
-    fun getUsers(): LiveData<List<FavoriteUserEntity>>
-
-    @Query("SELECT * FROM favorite_user")
     fun getFavoriteUsers(): LiveData<List<FavoriteUserEntity>>
+
+    @Query("SELECT * FROM favorite_user where username = :username")
+    fun getOneFavoriteUser(username: String): LiveData<FavoriteUserEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertFavoriteUser(favoriteUser: List<FavoriteUserEntity>)
@@ -24,6 +24,9 @@ interface FavoriteUserDao {
     @Query("DELETE FROM favorite_user")
     fun deleteAll()
 
-    @Query("SELECT EXISTS(SELECT * FROM favorite_user WHERE username = :username)")
+    @Query("SELECT * FROM favorite_user WHERE username = :username")
     fun isUserFavorited(username: String): Boolean
+
+    @Query("DELETE FROM favorite_user WHERE username = :username")
+    fun deleteFavoritedUser(username: String)
 }
