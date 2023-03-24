@@ -14,12 +14,14 @@ import com.example.githubusers.adapter.ListUserAdapter
 import com.example.githubusers.databinding.ActivityMainBinding
 import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.viewmodels.GithubUserViewModel
+import com.example.githubusers.viewmodels.ViewModelFactory
+import com.example.githubusers.data.Result
+import com.example.githubusers.data.local.entity.FavoriteUserEntity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var rvUser: RecyclerView
 
     private lateinit var binding: ActivityMainBinding
-    private val githubUserViewModel by viewModels<GithubUserViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +32,9 @@ class MainActivity : AppCompatActivity() {
 
         rvUser = binding.rvUser
         rvUser.setHasFixedSize(true)
+
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
+        val githubUserViewModel: GithubUserViewModel by viewModels { factory }
 
         githubUserViewModel.isLoading.observe(this) {
             showLoading(it)
@@ -47,24 +52,47 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        githubUserViewModel.listUserResponse.observe(this) {
-            setListUserData(it)
+        githubUserViewModel.findAllUser().observe(this) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> {
+                        binding?.progressBar?.visibility = View.VISIBLE
+                    }
+                    is Result.Success -> {
+                        binding?.progressBar?.visibility = View.GONE
+                        val newsData = result.data
+                        setListUserData(newsData)
+                    }
+                    is Result.Error -> {
+                        binding?.progressBar?.visibility = View.GONE
+                        Toast.makeText(
+                            this,
+                            "Terjadi kesalahan" + result.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    else -> {
 
-            if (githubUserViewModel.listUserResponse.value?.isEmpty() == true) {
-                showNotFoundMessage(true)
-            } else {
-                showNotFoundMessage(false)
+                    }
+                }
             }
+//            setListUserData(it)
+//
+//            if (githubUserViewModel.listUserResponse.value?.isEmpty() == true) {
+//                showNotFoundMessage(true)
+//            } else {
+//                showNotFoundMessage(false)
+//            }
         }
     }
 
-    private fun setListUserData(listUser: List<UserResponseItem>) {
+    private fun setListUserData(listUser: List<FavoriteUserEntity>) {
         rvUser.layoutManager = LinearLayoutManager(this)
         val listUserAdapter = ListUserAdapter(listUser)
         rvUser.adapter = listUserAdapter
 
         listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: UserResponseItem, index: Int) {
+            override fun onItemClicked(data: FavoriteUserEntity, index: Int) {
                 showSelectedUser(data)
                 val intent = Intent(this@MainActivity, UserDetailActivity::class.java)
                 intent.putExtra(UserDetailActivity.EXTRA_USER, data)
@@ -73,8 +101,8 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun showSelectedUser(user: UserResponseItem) {
-        Toast.makeText(this, "You choose " + user.login, Toast.LENGTH_SHORT).show()
+    private fun showSelectedUser(user: FavoriteUserEntity) {
+        Toast.makeText(this, "You choose " + user.username, Toast.LENGTH_SHORT).show()
     }
 
     private fun showLoading(isLoading: Boolean) {

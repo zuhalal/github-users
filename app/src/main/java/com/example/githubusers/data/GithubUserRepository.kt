@@ -24,21 +24,21 @@ class GithubUserRepository private constructor (
         client.enqueue(object : Callback<List<UserResponseItem>> {
             override fun onResponse(call: Call<List<UserResponseItem>>, response: Response<List<UserResponseItem>>) {
                 if (response.isSuccessful) {
-                    val newsList = ArrayList<FavoriteUserEntity>()
+                    val userList = ArrayList<FavoriteUserEntity>()
                     appExecutors.diskIO.execute {
                         response.body()?.forEach { article ->
                             val isBookmarked = favoriteUserDao.isUserFavorited(article.login)
-                            val news = FavoriteUserEntity(
+                            val user = FavoriteUserEntity(
                                 article.login,
                                 article.url,
                                 article.avatarUrl,
                                 article.htmlUrl,
                                 isBookmarked
                             )
-                            newsList.add(news)
+                            userList.add(user)
                         }
                         favoriteUserDao.deleteAll()
-                        favoriteUserDao.insertFavoriteUser(newsList)
+                        favoriteUserDao.insertFavoriteUser(userList)
                     }
                 }
             }
