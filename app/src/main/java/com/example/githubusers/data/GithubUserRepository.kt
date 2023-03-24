@@ -11,7 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FavoriteUserRepository private constructor (
+class GithubUserRepository private constructor (
     private val apiService: GithubApiService,
     private val favoriteUserDao: FavoriteUserDao,
     private val appExecutors: AppExecutors
@@ -67,14 +67,14 @@ class FavoriteUserRepository private constructor (
 
     companion object {
         @Volatile
-        private var instance: FavoriteUserRepository? = null
+        private var instance: GithubUserRepository? = null
         fun getInstance(
             apiService: GithubApiService,
             favoriteUserDao: FavoriteUserDao,
             appExecutors: AppExecutors
-        ): FavoriteUserRepository =
+        ): GithubUserRepository =
             instance ?: synchronized(this) {
-                instance ?: FavoriteUserRepository(apiService, favoriteUserDao, appExecutors)
+                instance ?: GithubUserRepository(apiService, favoriteUserDao, appExecutors)
             }.also { instance = it }
     }
 }
