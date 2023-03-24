@@ -11,8 +11,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.githubusers.adapter.SectionsPagerAdapter
 import com.example.githubusers.databinding.ActivityUserDetailBinding
-import com.example.githubusers.models.UserDetail
-import com.example.githubusers.models.UserResponseItem
+import com.example.githubusers.data.remote.models.UserDetail
+import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.viewmodels.GithubUserViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.githubusers.R
 import com.example.githubusers.adapter.ListUserFragmentAdapter
 import com.example.githubusers.databinding.FragmentFollowerBinding
-import com.example.githubusers.models.UserResponseItem
+import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.viewmodels.GithubUserViewModel
 
 class FollowerFragment : Fragment() {

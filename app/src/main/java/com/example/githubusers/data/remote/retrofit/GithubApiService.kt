@@ -1,8 +1,8 @@
-package com.example.githubusers.service
+package com.example.githubusers.data.remote.retrofit
 
-import com.example.githubusers.models.UserResponseItem
-import com.example.githubusers.models.SearchUserResponse
-import com.example.githubusers.models.UserDetail
+import com.example.githubusers.data.remote.models.UserResponseItem
+import com.example.githubusers.data.remote.models.SearchUserResponse
+import com.example.githubusers.data.remote.models.UserDetail
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

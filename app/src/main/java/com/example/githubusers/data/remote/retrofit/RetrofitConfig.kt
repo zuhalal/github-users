@@ -1,7 +1,6 @@
-package com.example.githubusers.remote;
+package com.example.githubusers.data.remote.retrofit;
 
 import com.example.githubusers.BuildConfig
-import com.example.githubusers.service.GithubApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

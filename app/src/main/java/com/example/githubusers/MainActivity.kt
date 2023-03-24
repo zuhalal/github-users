@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubusers.adapter.ListUserAdapter
 import com.example.githubusers.databinding.ActivityMainBinding
-import com.example.githubusers.models.UserResponseItem
+import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.viewmodels.GithubUserViewModel
 
 class MainActivity : AppCompatActivity() {

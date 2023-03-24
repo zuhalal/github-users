@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubusers.databinding.ItemRowUserBinding
 import com.example.githubusers.extensions.loadImage
-import com.example.githubusers.models.UserResponseItem
+import com.example.githubusers.data.remote.models.UserResponseItem
 
 class ListUserAdapter(private val listUser: List<UserResponseItem>) :
     RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
