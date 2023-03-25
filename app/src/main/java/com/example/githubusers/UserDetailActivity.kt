@@ -3,6 +3,7 @@ package com.example.githubusers
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -46,6 +47,9 @@ class UserDetailActivity : AppCompatActivity() {
         }
 
         val user = intent.getParcelableExtra<UserResponseItem>(EXTRA_USER)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = user?.login ?: "Detail"
 
         val userUrl = user?.url
         var isFavorited = false
@@ -160,6 +164,11 @@ class UserDetailActivity : AppCompatActivity() {
         }.attach()
         supportActionBar?.elevation = 0f
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun setUserDetailData(user: UserDetail) {

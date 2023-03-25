@@ -61,14 +61,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/username_upper_case"
-                    android:textColor="@color/black"
+                    android:textColor = "?android:textColorPrimary"
                     android:layout_marginEnd="16dp"
                     />
                 <TextView
                     android:id="@+id/tv_username_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:textColor = "?android:textColorPrimary"
                     android:text="@string/lorem_ipsum"
                     />
             </TableRow>
@@ -80,14 +80,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/follower"
-                    android:textColor="@color/black"
+                    android:textColor = "?android:textColorPrimary"
                     android:layout_marginEnd="16dp"
                     />
                 <TextView
                     android:id="@+id/tv_follower_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:textColor = "?android:textColorPrimary"
                     android:text="@string/lorem_ipsum"
                     />
             </TableRow>
@@ -99,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/following"
-                    android:textColor="@color/black"
+                    android:textColor = "?android:textColorPrimary"
                     android:layout_marginEnd="16dp"
                     />
                 <TextView
@@ -107,7 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lorem_ipsum"
-                    android:textColor="@color/black"
+                    android:textColor = "?android:textColorPrimary"
                     />
             </TableRow>
             <TableRow
@@ -118,7 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/company"
-                    android:textColor="@color/black"
+                    android:textColor = "?android:textColorPrimary"
                     android:layout_marginEnd="16dp"
                     />
                 <TextView
@@ -126,7 +126,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lorem_ipsum"
-                    android:textColor="@color/black"
+                    android:textColor = "?android:textColorPrimary"
                     />
             </TableRow>
             <TableRow
@@ -137,7 +137,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/location"
-                    android:textColor="@color/black"
+                    android:textColor = "?android:textColorPrimary"
                     android:layout_marginEnd="16dp"
                     />
                 <TextView
@@ -145,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lorem_ipsum"
-                    android:textColor="@color/black"
+                    android:textColor = "?android:textColorPrimary"
                     />
             </TableRow>
             <TableRow
@@ -156,7 +156,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/repository"
-                    android:textColor="@color/black"
+                    android:textColor = "?android:textColorPrimary"
                     android:layout_marginEnd="16dp"
                     />
                 <TextView
@@ -164,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lorem_ipsum"
-                    android:textColor="@color/black"
+                    android:textColor = "?android:textColorPrimary"
                     />
             </TableRow>
         </TableLayout>
