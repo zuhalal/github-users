@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.githubusers.adapter.SectionsPagerAdapter
@@ -16,6 +17,7 @@ import com.example.githubusers.data.local.entity.FavoriteUserEntity
 import com.example.githubusers.databinding.ActivityUserDetailBinding
 import com.example.githubusers.data.remote.models.UserDetail
 import com.example.githubusers.data.remote.models.UserResponseItem
+import com.example.githubusers.viewmodels.DarkModeViewModel
 import com.example.githubusers.viewmodels.GithubUserViewModel
 import com.example.githubusers.viewmodels.ViewModelFactory
 import com.google.android.material.tabs.TabLayout
@@ -32,6 +34,16 @@ class UserDetailActivity : AppCompatActivity() {
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
+        val darkModeViewModel: DarkModeViewModel by viewModels { factory }
+
+        darkModeViewModel.getThemeSettings().observe(this
+        ) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
 
         val user = intent.getParcelableExtra<UserResponseItem>(EXTRA_USER)
 

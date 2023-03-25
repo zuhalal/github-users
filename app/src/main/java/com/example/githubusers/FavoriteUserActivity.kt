@@ -10,6 +10,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubusers.adapter.ListUserAdapter
@@ -17,6 +18,7 @@ import com.example.githubusers.data.Result
 import com.example.githubusers.data.local.entity.FavoriteUserEntity
 import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.databinding.ActivityFavoriteUserBinding
+import com.example.githubusers.viewmodels.DarkModeViewModel
 import com.example.githubusers.viewmodels.GithubUserViewModel
 import com.example.githubusers.viewmodels.ViewModelFactory
 
@@ -37,6 +39,16 @@ class FavoriteUserActivity : AppCompatActivity() {
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
+        val darkModeViewModel: DarkModeViewModel by viewModels { factory }
+
+        darkModeViewModel.getThemeSettings().observe(this
+        ) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
 
         githubUserViewModel.findAllFavoriteUser().observe(this) { result ->
             if (result != null) {

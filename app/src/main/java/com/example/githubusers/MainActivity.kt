@@ -10,6 +10,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubusers.adapter.ListUserAdapter
@@ -18,6 +19,7 @@ import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.viewmodels.GithubUserViewModel
 import com.example.githubusers.viewmodels.ViewModelFactory
 import com.example.githubusers.data.Result
+import com.example.githubusers.viewmodels.DarkModeViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var rvUser: RecyclerView
@@ -36,6 +38,17 @@ class MainActivity : AppCompatActivity() {
 
         githubUserViewModel.isLoading.observe(this) {
             showLoading(it)
+        }
+
+        val darkModeViewModel: DarkModeViewModel by viewModels { factory }
+
+        darkModeViewModel.getThemeSettings().observe(this
+        ) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
         }
 
         binding.btnSend.setOnClickListener { view ->
@@ -89,6 +102,12 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.favorite -> {
                 val i = Intent(this, FavoriteUserActivity::class.java)
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i)
+                return true
+            }
+            R.id.setting -> {
+                val i = Intent(this, DarkModeActivity::class.java)
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i)
                 return true

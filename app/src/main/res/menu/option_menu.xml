@@ -6,10 +6,9 @@
         android:icon="@drawable/ic_favorite_border_24"
         android:title="@string/favorite"
         app:showAsAction="always" />
-<!--    <group android:menuCategory="container">-->
-<!--        <item android:id="@+id/menu1"-->
-<!--            android:title="@string/menu_1"-->
-<!--            android:icon = "@drawable/ic_announcement_white_24px"-->
-<!--            app:showAsAction="always" />-->
-<!--    </group>-->
+    <group android:menuCategory="container">
+        <item android:id="@+id/setting"
+            android:title="Setting"
+            app:showAsAction="never" />
+    </group>
 </menu>
