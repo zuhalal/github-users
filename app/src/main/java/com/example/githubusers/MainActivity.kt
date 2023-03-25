@@ -53,10 +53,22 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnSend.setOnClickListener { view ->
             if (binding.searchInput.text.toString() != "") {
-                githubUserViewModel.findUser(binding.searchInput.text.toString())
+                githubUserViewModel.findUser(binding.searchInput.text.toString()).observe(this) {
+                    when (it) {
+                        is Result.Success -> {
+                            if (it.data.isEmpty()) {
+                                showNotFoundMessage(true)
+                            } else {
+                                showNotFoundMessage(false)
+                            }
+                        }
+                        else -> {}
+                    }
+                }
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
             } else {
+                showNotFoundMessage(false)
                 githubUserViewModel.findAllUser()
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
@@ -71,14 +83,15 @@ class MainActivity : AppCompatActivity() {
                     }
                     is Result.Success -> {
                         binding.progressBar.visibility = View.GONE
-                        val newsData = result.data
-                        setListUserData(newsData)
+                        val data = result.data
+
+                        setListUserData(data)
                     }
                     is Result.Error -> {
                         binding.progressBar.visibility = View.GONE
                         Toast.makeText(
                             this,
-                            "Terjadi kesalahan" + result.error,
+                            "Terjadi kesalahan " + result.error,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -102,18 +115,18 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.favorite -> {
                 val i = Intent(this, FavoriteUserActivity::class.java)
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(i)
                 return true
             }
             R.id.setting -> {
                 val i = Intent(this, DarkModeActivity::class.java)
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(i)
                 return true
             }
-            else -> return true
         }
+        return true
     }
 
 
@@ -140,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-//    private fun showNotFoundMessage(show: Boolean) {
-//        binding.notFound.visibility = if (show) View.VISIBLE else View.GONE
-//    }
+    private fun showNotFoundMessage(show: Boolean) {
+        binding.notFound.visibility = if (show) View.VISIBLE else View.GONE
+    }
 }

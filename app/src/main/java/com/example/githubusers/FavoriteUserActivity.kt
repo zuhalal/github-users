@@ -35,7 +35,7 @@ class FavoriteUserActivity : AppCompatActivity() {
         rvUser = binding.rvUserFavorite
         rvUser.setHasFixedSize(true)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
@@ -59,6 +59,7 @@ class FavoriteUserActivity : AppCompatActivity() {
                     is Result.Success -> {
                         binding.progressBar.visibility = View.GONE
                         data = result.data
+
                         setListUserData(data)
                     }
                     is Result.Error -> {
@@ -75,14 +76,20 @@ class FavoriteUserActivity : AppCompatActivity() {
 
         binding.btnSend.setOnClickListener { view ->
             if (binding.searchInput.text.toString() != "") {
-                data.forEach { Log.d("BBB",
-                    (binding.searchInput.text.toString().lowercase() in it.username.lowercase()).toString()
-                ) }
+
                 val filtered = data.filter { binding.searchInput.text.toString().lowercase() in it.username.lowercase() }
+
+                if (filtered.isEmpty()) {
+                    showNotFoundMessage(true)
+                } else {
+                    showNotFoundMessage(false)
+                }
+
                 setListUserData(filtered)
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
             } else {
+                showNotFoundMessage(false)
                 setListUserData(data)
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
@@ -117,5 +124,9 @@ class FavoriteUserActivity : AppCompatActivity() {
 
     private fun showSelectedUser(user: UserResponseItem) {
         Toast.makeText(this, "You choose " + user.login, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showNotFoundMessage(show: Boolean) {
+        binding.notFound.visibility = if (show) View.VISIBLE else View.GONE
     }
 }

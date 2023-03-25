@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.githubusers.R
 import com.example.githubusers.adapter.ListUserFragmentAdapter
 import com.example.githubusers.databinding.FragmentFollowerBinding
 import com.example.githubusers.data.remote.models.UserResponseItem
@@ -24,7 +23,7 @@ class FollowerFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentFollowerBinding.inflate(inflater, container, false)
         return binding.root
     }

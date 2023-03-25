@@ -24,4 +24,5 @@
     <string name="favorite">favorite</string>
     <string name="favorite_upper">Favorite</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="setting">Setting</string>
 </resources>

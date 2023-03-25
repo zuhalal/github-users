@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.example.githubusers.data.GithubUserRepository
 import com.example.githubusers.data.local.entity.FavoriteUserEntity
 import com.example.githubusers.data.remote.models.UserResponseItem
-import com.example.githubusers.data.remote.models.UserDetail
 import com.example.githubusers.data.remote.retrofit.RetrofitConfig
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,8 +37,6 @@ class GithubUserViewModel(private val repository: GithubUserRepository) : ViewMo
     fun setFavoriteUser(user: FavoriteUserEntity) = repository.setFavoriteUser(user)
 
     fun deleteFavoriteUser(username: String) = repository.removeFavoriteUser(username)
-
-    fun isFavorited(username: String) = repository.isFavorited(username)
 
     fun findAllUserFollower(url: String) {
         val username = url.split("https://api.github.com/users/")[1]

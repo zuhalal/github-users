@@ -55,10 +55,6 @@ class UserDetailActivity : AppCompatActivity() {
         var isFavorited = false
 
         if (userUrl != null) {
-//            if (githubUserViewModel.findUserByUrl(userUrl).value == null) {
-//
-//            }
-
             githubUserViewModel.findUserByUrl(userUrl).observe(this) { result ->
                 if (result != null) {
                     when (result) {
@@ -82,10 +78,6 @@ class UserDetailActivity : AppCompatActivity() {
                     }
                 }
         }
-
-//        githubUserViewModel.userDetail.observe(this) {
-//            setUserDetailData(it)
-//        }
 
         val btnFav: Button = binding.btnFavorite
 
