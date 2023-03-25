@@ -21,4 +21,6 @@
     <string name="favorite_this_account">Favorite This Account</string>
     <string name="favorite_this_user">Favorite this user</string>
     <string name="unfavorite_this_user">Unfavorite this user</string>
+    <string name="favorite">favorite</string>
+    <string name="favorite_upper">Favorite</string>
 </resources>

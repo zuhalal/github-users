@@ -1,9 +1,13 @@
 package com.example.githubusers
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +22,7 @@ import com.example.githubusers.viewmodels.ViewModelFactory
 class FavoriteUserActivity : AppCompatActivity() {
     private lateinit var rvUser: RecyclerView
     private lateinit var binding: ActivityFavoriteUserBinding
+    private lateinit var data: List<FavoriteUserEntity>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +31,8 @@ class FavoriteUserActivity : AppCompatActivity() {
 
         rvUser = binding.rvUserFavorite
         rvUser.setHasFixedSize(true)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
@@ -38,8 +45,8 @@ class FavoriteUserActivity : AppCompatActivity() {
                     }
                     is Result.Success -> {
                         binding.progressBar.visibility = View.GONE
-                        val newsData = result.data
-                        setListUserData(newsData)
+                        data = result.data
+                        setListUserData(data)
                     }
                     is Result.Error -> {
                         binding.progressBar.visibility = View.GONE
@@ -52,6 +59,27 @@ class FavoriteUserActivity : AppCompatActivity() {
                 }
             }
         }
+
+        binding.btnSend.setOnClickListener { view ->
+            if (binding.searchInput.text.toString() != "") {
+                data.forEach { Log.d("BBB",
+                    (binding.searchInput.text.toString().lowercase() in it.username.lowercase()).toString()
+                ) }
+                val filtered = data.filter { binding.searchInput.text.toString().lowercase() in it.username.lowercase() }
+                setListUserData(filtered)
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            } else {
+                setListUserData(data)
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun setListUserData(listUser: List<FavoriteUserEntity>) {

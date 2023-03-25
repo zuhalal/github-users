@@ -123,7 +123,7 @@ class UserDetailActivity : AppCompatActivity() {
                     FavoriteUserEntity(
                         user.login,
                         user.url,
-                        user.htmlUrl,
+                        user.avatarUrl,
                         user.htmlUrl
                     )
                 )

@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -76,6 +78,25 @@ class MainActivity : AppCompatActivity() {
 //            }
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.option_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.favorite -> {
+                val i = Intent(this, FavoriteUserActivity::class.java)
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i)
+                return true
+            }
+            else -> return true
+        }
+    }
+
 
     private fun setListUserData(listUser: List<UserResponseItem>) {
         rvUser.layoutManager = LinearLayoutManager(this)
