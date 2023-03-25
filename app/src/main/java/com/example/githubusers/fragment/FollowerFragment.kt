@@ -95,7 +95,7 @@ class FollowerFragment : Fragment() {
     }
 
     private fun showSelectedUser(user: UserResponseItem) {
-        Toast.makeText(activity, "${R.string.selected_user} ${user.login}", Toast.LENGTH_SHORT)
+        Toast.makeText(activity, "Follower with username: ${user.login}", Toast.LENGTH_SHORT)
             .show()
     }
 

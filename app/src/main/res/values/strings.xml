@@ -19,8 +19,8 @@
     <string name="search">Search</string>
     <string name="selected_user">Follower with username: </string>
     <string name="favorite_this_account">Favorite This Account</string>
-    <string name="favorite_this_user">Favorite this user</string>
-    <string name="unfavorite_this_user">Unfavorite this user</string>
+    <string name="favorite_this_user">Add to Favorite</string>
+    <string name="unfavorite_this_user">Remove from Favorite</string>
     <string name="favorite">favorite</string>
     <string name="favorite_upper">Favorite</string>
     <string name="dark_mode">Dark Mode</string>
