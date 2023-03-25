@@ -35,7 +35,7 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/purple_700"
+            android:textColor = "?android:textColorPrimary"
             android:textStyle="bold"
             android:text="@string/nama_upper_case"
             android:layout_gravity="center_horizontal"
@@ -176,7 +176,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/share_this_account"
-            android:backgroundTint="@color/purple_500"
             android:textColor="@color/white"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -186,7 +185,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/favorite_this_account"
-            android:backgroundTint="@color/purple_500"
             android:textColor="@color/white"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -198,7 +196,7 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabTextColor="@color/white"/>
+            app:tabTextColor="?android:textColorPrimary"/>
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
