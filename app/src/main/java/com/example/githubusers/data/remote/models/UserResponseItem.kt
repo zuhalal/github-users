@@ -17,7 +17,4 @@ data class UserResponseItem(
 
     @field:SerializedName("html_url")
     val htmlUrl: String,
-
-    @field:SerializedName("id")
-    val id: Int,
 ) : Parcelable

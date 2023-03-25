@@ -12,9 +12,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.githubusers.adapter.ListFavoriteUserAdapter
+import com.example.githubusers.adapter.ListUserAdapter
 import com.example.githubusers.data.Result
 import com.example.githubusers.data.local.entity.FavoriteUserEntity
+import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.databinding.ActivityFavoriteUserBinding
 import com.example.githubusers.viewmodels.GithubUserViewModel
 import com.example.githubusers.viewmodels.ViewModelFactory
@@ -84,11 +85,16 @@ class FavoriteUserActivity : AppCompatActivity() {
 
     private fun setListUserData(listUser: List<FavoriteUserEntity>) {
         rvUser.layoutManager = LinearLayoutManager(this)
-        val listUserAdapter = ListFavoriteUserAdapter(listUser)
+        val items = arrayListOf<UserResponseItem>()
+        listUser.map {
+            val item = UserResponseItem(login = it.username, avatarUrl = it.avatarUrl ?: "", htmlUrl = it.htmlUrl, url = it.url)
+            items.add(item)
+        }
+        val listUserAdapter = ListUserAdapter(items)
         rvUser.adapter = listUserAdapter
 
-        listUserAdapter.setOnItemClickCallback(object : ListFavoriteUserAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: FavoriteUserEntity, index: Int) {
+        listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: UserResponseItem, index: Int) {
                 showSelectedUser(data)
                 val intent = Intent(this@FavoriteUserActivity, UserDetailActivity::class.java)
                 intent.putExtra(UserDetailActivity.EXTRA_USER, data)
@@ -97,7 +103,7 @@ class FavoriteUserActivity : AppCompatActivity() {
         })
     }
 
-    private fun showSelectedUser(user: FavoriteUserEntity) {
-        Toast.makeText(this, "You choose " + user.username, Toast.LENGTH_SHORT).show()
+    private fun showSelectedUser(user: UserResponseItem) {
+        Toast.makeText(this, "You choose " + user.login, Toast.LENGTH_SHORT).show()
     }
 }

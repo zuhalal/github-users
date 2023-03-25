@@ -37,7 +37,6 @@ class GithubUserRepository private constructor (
                                 article.url,
                                 article.avatarUrl,
                                 article.htmlUrl,
-                                article.id
                             )
                             userList.add(user)
                         }
