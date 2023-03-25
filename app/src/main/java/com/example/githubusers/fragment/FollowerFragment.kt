@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.githubusers.adapter.ListUserFragmentAdapter
+import com.example.githubusers.adapter.ListUserAdapter
 import com.example.githubusers.databinding.FragmentFollowerBinding
 import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.viewmodels.GithubUserViewModel
@@ -82,11 +82,11 @@ class FollowerFragment : Fragment() {
 
     private fun setListUserData(listUser: List<UserResponseItem>) {
         rvUser.layoutManager = LinearLayoutManager(requireContext())
-        val listUserAdapter = ListUserFragmentAdapter(listUser)
+        val listUserAdapter = ListUserAdapter(listUser)
         rvUser.adapter = listUserAdapter
 
         listUserAdapter.setOnItemClickCallback(object :
-            ListUserFragmentAdapter.OnItemClickCallback {
+            ListUserAdapter.OnItemClickCallback {
             override fun onItemClicked(data: UserResponseItem, index: Int) {
                 showSelectedUser(data)
             }
