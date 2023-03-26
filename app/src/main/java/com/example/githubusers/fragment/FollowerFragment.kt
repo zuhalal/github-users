@@ -42,71 +42,73 @@ class FollowerFragment : Fragment() {
 
         if (username != null) {
             if (index == 0) {
-                githubUserViewModel.findAllUserFollower(username).observe(viewLifecycleOwner) { result ->
-                    if (result != null) {
-                        when (result) {
-                            is Result.Loading -> {
-                                binding.progressBar.visibility = View.VISIBLE
-                            }
-                            is Result.Success -> {
-                                binding.progressBar.visibility = View.GONE
-                                val data = result.data
-
-                                setListUserData(data)
-
-                                if (data.isNotEmpty()) {
-                                    if (data.size > 3) {
-                                        binding.rvUserFollower.minimumHeight = 1000
-                                    }
-                                    showNotFoundMessage(false)
-                                } else {
-                                    showNotFoundMessage(true)
+                githubUserViewModel.findAllUserFollower(username)
+                    .observe(viewLifecycleOwner) { result ->
+                        if (result != null) {
+                            when (result) {
+                                is Result.Loading -> {
+                                    binding.progressBar.visibility = View.VISIBLE
                                 }
-                            }
-                            is Result.Error -> {
-                                binding.progressBar.visibility = View.GONE
-                                Toast.makeText(
-                                    activity,
-                                    "Terjadi kesalahan " + result.error,
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                is Result.Success -> {
+                                    binding.progressBar.visibility = View.GONE
+                                    val data = result.data
+
+                                    setListUserData(data)
+
+                                    if (data.isNotEmpty()) {
+                                        if (data.size > 3) {
+                                            binding.rvUserFollower.minimumHeight = 1000
+                                        }
+                                        showNotFoundMessage(false)
+                                    } else {
+                                        showNotFoundMessage(true)
+                                    }
+                                }
+                                is Result.Error -> {
+                                    binding.progressBar.visibility = View.GONE
+                                    Toast.makeText(
+                                        activity,
+                                        "Terjadi kesalahan " + result.error,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
                         }
                     }
-                }
             } else {
-                githubUserViewModel.findAllUserFollowing(username).observe(viewLifecycleOwner) { result ->
-                    if (result != null) {
-                        when (result) {
-                            is Result.Loading -> {
-                                binding.progressBar.visibility = View.VISIBLE
-                            }
-                            is Result.Success -> {
-                                binding.progressBar.visibility = View.GONE
-                                val data = result.data
-
-                                setListUserData(data)
-
-                                if (data.isNotEmpty()) {
-                                    if (data.size > 3) {
-                                        binding.rvUserFollower.minimumHeight = 1000
-                                    }
-                                    showNotFoundMessage(false)
-                                } else {
-                                    showNotFoundMessage(true)
+                githubUserViewModel.findAllUserFollowing(username)
+                    .observe(viewLifecycleOwner) { result ->
+                        if (result != null) {
+                            when (result) {
+                                is Result.Loading -> {
+                                    binding.progressBar.visibility = View.VISIBLE
                                 }
-                            }
-                            is Result.Error -> {
-                                binding.progressBar.visibility = View.GONE
-                                Toast.makeText(
-                                    activity,
-                                    "Terjadi kesalahan " + result.error,
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                is Result.Success -> {
+                                    binding.progressBar.visibility = View.GONE
+                                    val data = result.data
+
+                                    setListUserData(data)
+
+                                    if (data.isNotEmpty()) {
+                                        if (data.size > 3) {
+                                            binding.rvUserFollower.minimumHeight = 1000
+                                        }
+                                        showNotFoundMessage(false)
+                                    } else {
+                                        showNotFoundMessage(true)
+                                    }
+                                }
+                                is Result.Error -> {
+                                    binding.progressBar.visibility = View.GONE
+                                    Toast.makeText(
+                                        activity,
+                                        "Terjadi kesalahan " + result.error,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
                         }
                     }
-                }
             }
         }
 

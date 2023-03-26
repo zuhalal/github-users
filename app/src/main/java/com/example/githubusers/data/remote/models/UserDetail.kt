@@ -18,12 +18,6 @@ data class UserDetail(
     @field:SerializedName("id")
     val id: Int? = null,
 
-    @field:SerializedName("email")
-    val email: Any? = null,
-
-    @field:SerializedName("organizations_url")
-    val organizationsUrl: String? = null,
-
     @field:SerializedName("followers_url")
     val followersUrl: String? = null,
 

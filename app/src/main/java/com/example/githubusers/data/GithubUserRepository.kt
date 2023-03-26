@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class GithubUserRepository private constructor (
+class GithubUserRepository private constructor(
     private val apiService: GithubApiService,
     private val favoriteUserDao: FavoriteUserDao,
     private val appExecutors: AppExecutors
@@ -30,7 +30,10 @@ class GithubUserRepository private constructor (
         apiResult.value = Result.Loading
         val client = apiService.getListUser()
         client.enqueue(object : Callback<List<UserResponseItem>> {
-            override fun onResponse(call: Call<List<UserResponseItem>>, response: Response<List<UserResponseItem>>) {
+            override fun onResponse(
+                call: Call<List<UserResponseItem>>,
+                response: Response<List<UserResponseItem>>
+            ) {
                 if (response.isSuccessful) {
                     val userList = ArrayList<UserResponseItem>()
                     appExecutors.diskIO.execute {
@@ -65,7 +68,8 @@ class GithubUserRepository private constructor (
                 response: Response<SearchUserResponse>
             ) {
                 if (response.isSuccessful) {
-                    apiResult.value = Result.Success(response.body()?.items as List<UserResponseItem>)
+                    apiResult.value =
+                        Result.Success(response.body()?.items as List<UserResponseItem>)
                 }
             }
 
@@ -99,7 +103,7 @@ class GithubUserRepository private constructor (
         return userDetail
     }
 
-    fun findAllUserFollower(url: String): LiveData<Result<List<UserResponseItem>>>  {
+    fun findAllUserFollower(url: String): LiveData<Result<List<UserResponseItem>>> {
         val username = url.split("https://api.github.com/users/")[1]
         listFollower.value = Result.Loading
         val client = RetrofitConfig.getGithubApiService().getListUserFollower(username)
@@ -121,7 +125,7 @@ class GithubUserRepository private constructor (
         return listFollower
     }
 
-    fun findAllUserFollowing(url: String): LiveData<Result<List<UserResponseItem>>>  {
+    fun findAllUserFollowing(url: String): LiveData<Result<List<UserResponseItem>>> {
         val username = url.split("https://api.github.com/users/")[1]
         listFollowing.value = Result.Loading
         val client = RetrofitConfig.getGithubApiService().getListUserFollowing(username)
