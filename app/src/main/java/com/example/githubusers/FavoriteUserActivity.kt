@@ -32,7 +32,6 @@ class FavoriteUserActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         rvUser = binding.rvUserFavorite
-        rvUser.setHasFixedSize(true)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -104,6 +103,7 @@ class FavoriteUserActivity : AppCompatActivity() {
     }
 
     private fun setListUserData(listUser: List<FavoriteUserEntity>) {
+        rvUser.setHasFixedSize(true)
         rvUser.layoutManager = LinearLayoutManager(this)
         val items = arrayListOf<UserResponseItem>()
         listUser.map {

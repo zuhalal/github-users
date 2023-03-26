@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         rvUser = binding.rvUser
-        rvUser.setHasFixedSize(true)
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
@@ -138,6 +137,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setListUserData(listUser: List<UserResponseItem>) {
+        rvUser.setHasFixedSize(true)
         rvUser.layoutManager = LinearLayoutManager(this)
         rvUser.setHasFixedSize(true)
 
