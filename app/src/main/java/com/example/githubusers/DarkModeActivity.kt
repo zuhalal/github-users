@@ -22,7 +22,8 @@ class DarkModeActivity : AppCompatActivity() {
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val darkModeViewModel: DarkModeViewModel by viewModels { factory }
 
-        darkModeViewModel.getThemeSettings().observe(this
+        darkModeViewModel.getThemeSettings().observe(
+            this
         ) { isDarkModeActive: Boolean ->
             if (isDarkModeActive) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -34,7 +35,7 @@ class DarkModeActivity : AppCompatActivity() {
         }
 
         switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-           darkModeViewModel.saveThemeSetting(isChecked)
+            darkModeViewModel.saveThemeSetting(isChecked)
         }
     }
 }

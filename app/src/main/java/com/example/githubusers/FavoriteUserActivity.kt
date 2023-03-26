@@ -40,7 +40,8 @@ class FavoriteUserActivity : AppCompatActivity() {
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
         val darkModeViewModel: DarkModeViewModel by viewModels { factory }
 
-        darkModeViewModel.getThemeSettings().observe(this
+        darkModeViewModel.getThemeSettings().observe(
+            this
         ) { isDarkModeActive: Boolean ->
             if (isDarkModeActive) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -76,7 +77,9 @@ class FavoriteUserActivity : AppCompatActivity() {
         binding.btnSend.setOnClickListener { view ->
             if (binding.searchInput.text.toString() != "") {
 
-                val filtered = data.filter { binding.searchInput.text.toString().lowercase() in it.username.lowercase() }
+                val filtered = data.filter {
+                    binding.searchInput.text.toString().lowercase() in it.username.lowercase()
+                }
 
                 if (filtered.isEmpty()) {
                     showNotFoundMessage(true)
@@ -105,7 +108,12 @@ class FavoriteUserActivity : AppCompatActivity() {
         rvUser.layoutManager = LinearLayoutManager(this)
         val items = arrayListOf<UserResponseItem>()
         listUser.map {
-            val item = UserResponseItem(login = it.username, avatarUrl = it.avatarUrl ?: "", htmlUrl = it.htmlUrl, url = it.url)
+            val item = UserResponseItem(
+                login = it.username,
+                avatarUrl = it.avatarUrl ?: "",
+                htmlUrl = it.htmlUrl,
+                url = it.url
+            )
             items.add(item)
         }
         val listUserAdapter = ListUserAdapter()

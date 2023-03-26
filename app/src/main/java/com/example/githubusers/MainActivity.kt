@@ -41,7 +41,8 @@ class MainActivity : AppCompatActivity() {
             showLoading(it)
         }
 
-        darkModeViewModel.getThemeSettings().observe(this
+        darkModeViewModel.getThemeSettings().observe(
+            this
         ) { isDarkModeActive: Boolean ->
             if (isDarkModeActive) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

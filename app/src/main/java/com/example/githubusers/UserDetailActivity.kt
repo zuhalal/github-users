@@ -46,7 +46,8 @@ class UserDetailActivity : AppCompatActivity() {
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
         val darkModeViewModel: DarkModeViewModel by viewModels { factory }
 
-        darkModeViewModel.getThemeSettings().observe(this
+        darkModeViewModel.getThemeSettings().observe(
+            this
         ) { isDarkModeActive: Boolean ->
             if (isDarkModeActive) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -78,81 +79,82 @@ class UserDetailActivity : AppCompatActivity() {
                         }
                     }
                 }
-        }
+            }
 
 
-        githubUserViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
+            githubUserViewModel.isLoading.observe(this) {
+                showLoading(it)
+            }
 
-        githubUserViewModel.findAllFavoriteUser().observe(this) { result ->
-            if (result != null) {
-                when (result) {
-                    is Result.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is Result.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        val newsData = result.data
-                        isFavorited = newsData.find{it.username == user.login}?.username !== null
-
-                        if (!isFavorited) {
-                            btnFav.text = getString(R.string.favorite_this_user)
-                        } else {
-                            btnFav.text = getString(R.string.unfavorite_this_user)
+            githubUserViewModel.findAllFavoriteUser().observe(this) { result ->
+                if (result != null) {
+                    when (result) {
+                        is Result.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
                         }
-                    }
-                    is Result.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        Toast.makeText(
-                            this,
-                            "Terjadi kesalahan" + result.error,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        is Result.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            val newsData = result.data
+                            isFavorited =
+                                newsData.find { it.username == user.login }?.username !== null
+
+                            if (!isFavorited) {
+                                btnFav.text = getString(R.string.favorite_this_user)
+                            } else {
+                                btnFav.text = getString(R.string.unfavorite_this_user)
+                            }
+                        }
+                        is Result.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(
+                                this,
+                                "Terjadi kesalahan" + result.error,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }
-        }
 
-        btn.setOnClickListener {
-            val openURL = Intent(Intent.ACTION_SEND)
-            openURL.putExtra(Intent.EXTRA_TEXT, userDetail.htmlUrl)
-            openURL.type = "text/plain"
+            btn.setOnClickListener {
+                val openURL = Intent(Intent.ACTION_SEND)
+                openURL.putExtra(Intent.EXTRA_TEXT, userDetail.htmlUrl)
+                openURL.type = "text/plain"
 
-            val shareIntent = Intent.createChooser(openURL, null)
-            startActivity(shareIntent)
-        }
-
-        btnFav.setOnClickListener {
-            if (!isFavorited) {
-                githubUserViewModel.setFavoriteUser(
-                    FavoriteUserEntity(
-                        user.login,
-                        user.url,
-                        user.avatarUrl,
-                        user.htmlUrl
-                    )
-                )
-            } else {
-                githubUserViewModel.deleteFavoriteUser(user.login)
+                val shareIntent = Intent.createChooser(openURL, null)
+                startActivity(shareIntent)
             }
-        }
 
-        val sectionsPagerAdapter = SectionsPagerAdapter(this)
+            btnFav.setOnClickListener {
+                if (!isFavorited) {
+                    githubUserViewModel.setFavoriteUser(
+                        FavoriteUserEntity(
+                            user.login,
+                            user.url,
+                            user.avatarUrl,
+                            user.htmlUrl
+                        )
+                    )
+                } else {
+                    githubUserViewModel.deleteFavoriteUser(user.login)
+                }
+            }
 
-        if (userUrl !== "") {
-            sectionsPagerAdapter.usernameUrl = userUrl
-        }
+            val sectionsPagerAdapter = SectionsPagerAdapter(this)
 
-        val viewPager: ViewPager2 = binding.viewPager
-        viewPager.adapter = sectionsPagerAdapter
+            if (userUrl !== "") {
+                sectionsPagerAdapter.usernameUrl = userUrl
+            }
 
-        val tabs: TabLayout = binding.tabs
+            val viewPager: ViewPager2 = binding.viewPager
+            viewPager.adapter = sectionsPagerAdapter
 
-        TabLayoutMediator(tabs, viewPager) { tab, position ->
-            tab.text = resources.getString(TAB_TITLES[position])
-        }.attach()
-        supportActionBar?.elevation = 0f
+            val tabs: TabLayout = binding.tabs
+
+            TabLayoutMediator(tabs, viewPager) { tab, position ->
+                tab.text = resources.getString(TAB_TITLES[position])
+            }.attach()
+            supportActionBar?.elevation = 0f
         }
     }
 
