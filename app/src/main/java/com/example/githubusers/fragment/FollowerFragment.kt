@@ -14,6 +14,7 @@ import com.example.githubusers.databinding.FragmentFollowerBinding
 import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.viewmodels.GithubUserViewModel
 import com.example.githubusers.viewmodels.ViewModelFactory
+import com.example.githubusers.data.Result
 
 class FollowerFragment : Fragment() {
     private lateinit var rvUser: RecyclerView
@@ -35,43 +36,77 @@ class FollowerFragment : Fragment() {
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
 
         rvUser = binding.rvUserFollower
-        rvUser.setHasFixedSize(true)
 
-        val index = arguments?.getInt(ARG_SECTION_NUMBER, 0)
+        val index = arguments?.getInt(ARG_SECTION_NUMBER)
         val username = arguments?.getString(ARG_USERNAME_URL)
-
 
         if (username != null) {
             if (index == 0) {
-                if (githubUserViewModel.listFollower.value == null) {
-                    githubUserViewModel.findAllUserFollower(username)
-                }
-            } else {
-                if (githubUserViewModel.listFollowing.value == null) {
-                    githubUserViewModel.findAllUserFollowing(username)
-                }
-            }
-        }
+                githubUserViewModel.findAllUserFollower(username).observe(viewLifecycleOwner) { result ->
+                    if (result != null) {
+                        when (result) {
+                            is Result.Loading -> {
+                                binding.progressBar.visibility = View.VISIBLE
+                            }
+                            is Result.Success -> {
+                                binding.progressBar.visibility = View.GONE
+                                val data = result.data
 
-        githubUserViewModel.listFollower.observe(viewLifecycleOwner) {
-            setListUserData(it)
-            if (it.isNotEmpty()) {
-                if (it.size > 3) {
-                    binding.rvUserFollower.minimumHeight = 1000
-                }
-            } else {
-                showNotFoundMessage(true)
-            }
-        }
+                                setListUserData(data)
 
-        githubUserViewModel.listFollowing.observe(viewLifecycleOwner) {
-            setListUserData(it)
-            if (it.isNotEmpty()) {
-                if (it.size > 3) {
-                    binding.rvUserFollower.minimumHeight = 1000
+                                if (data.isNotEmpty()) {
+                                    if (data.size > 3) {
+                                        binding.rvUserFollower.minimumHeight = 1000
+                                    }
+                                    showNotFoundMessage(false)
+                                } else {
+                                    showNotFoundMessage(true)
+                                }
+                            }
+                            is Result.Error -> {
+                                binding.progressBar.visibility = View.GONE
+                                Toast.makeText(
+                                    activity,
+                                    "Terjadi kesalahan " + result.error,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
                 }
             } else {
-                showNotFoundMessage(true)
+                githubUserViewModel.findAllUserFollowing(username).observe(viewLifecycleOwner) { result ->
+                    if (result != null) {
+                        when (result) {
+                            is Result.Loading -> {
+                                binding.progressBar.visibility = View.VISIBLE
+                            }
+                            is Result.Success -> {
+                                binding.progressBar.visibility = View.GONE
+                                val data = result.data
+
+                                setListUserData(data)
+
+                                if (data.isNotEmpty()) {
+                                    if (data.size > 3) {
+                                        binding.rvUserFollower.minimumHeight = 1000
+                                    }
+                                    showNotFoundMessage(false)
+                                } else {
+                                    showNotFoundMessage(true)
+                                }
+                            }
+                            is Result.Error -> {
+                                binding.progressBar.visibility = View.GONE
+                                Toast.makeText(
+                                    activity,
+                                    "Terjadi kesalahan " + result.error,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -96,7 +131,7 @@ class FollowerFragment : Fragment() {
     }
 
     private fun showSelectedUser(user: UserResponseItem) {
-        Toast.makeText(activity, "Follower with username: ${user.login}", Toast.LENGTH_SHORT)
+        Toast.makeText(activity, "Username: ${user.login}", Toast.LENGTH_SHORT)
             .show()
     }
 

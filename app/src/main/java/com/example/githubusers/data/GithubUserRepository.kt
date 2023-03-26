@@ -8,6 +8,7 @@ import com.example.githubusers.data.remote.models.SearchUserResponse
 import com.example.githubusers.data.remote.models.UserDetail
 import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.data.remote.retrofit.GithubApiService
+import com.example.githubusers.data.remote.retrofit.RetrofitConfig
 import com.example.githubusers.utils.AppExecutors
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,7 +22,9 @@ class GithubUserRepository private constructor (
     private val result = MediatorLiveData<Result<List<FavoriteUserEntity>>>()
     private val apiResult = MediatorLiveData<Result<List<UserResponseItem>>>()
     private val userDetail = MediatorLiveData<Result<UserDetail>>()
-    private val userFavorited = MediatorLiveData<Result<FavoriteUserEntity>>()
+    private val listFollower = MediatorLiveData<Result<List<UserResponseItem>>>()
+    private val listFollowing = MediatorLiveData<Result<List<UserResponseItem>>>()
+
 
     fun getListUsers(): LiveData<Result<List<UserResponseItem>>> {
         apiResult.value = Result.Loading
@@ -96,20 +99,56 @@ class GithubUserRepository private constructor (
         return userDetail
     }
 
+    fun findAllUserFollower(url: String): LiveData<Result<List<UserResponseItem>>>  {
+        val username = url.split("https://api.github.com/users/")[1]
+        listFollower.value = Result.Loading
+        val client = RetrofitConfig.getGithubApiService().getListUserFollower(username)
+        client.enqueue(object : Callback<List<UserResponseItem>> {
+            override fun onResponse(
+                call: Call<List<UserResponseItem>>,
+                response: Response<List<UserResponseItem>>
+            ) {
+                if (response.isSuccessful) {
+                    listFollower.value = Result.Success(response.body() as List<UserResponseItem>)
+                }
+            }
+
+            override fun onFailure(call: Call<List<UserResponseItem>>, t: Throwable) {
+                listFollower.value = Result.Error(t.message.toString())
+            }
+        })
+
+        return listFollower
+    }
+
+    fun findAllUserFollowing(url: String): LiveData<Result<List<UserResponseItem>>>  {
+        val username = url.split("https://api.github.com/users/")[1]
+        listFollowing.value = Result.Loading
+        val client = RetrofitConfig.getGithubApiService().getListUserFollowing(username)
+        client.enqueue(object : Callback<List<UserResponseItem>> {
+            override fun onResponse(
+                call: Call<List<UserResponseItem>>,
+                response: Response<List<UserResponseItem>>
+            ) {
+                if (response.isSuccessful) {
+                    listFollowing.value = Result.Success(response.body() as List<UserResponseItem>)
+                }
+            }
+
+            override fun onFailure(call: Call<List<UserResponseItem>>, t: Throwable) {
+                listFollowing.value = Result.Error(t.message.toString())
+            }
+        })
+
+        return listFollowing
+    }
+
     fun getFavoriteUser(): LiveData<Result<List<FavoriteUserEntity>>> {
         val localData = favoriteUserDao.getFavoriteUsers()
         result.addSource(localData) { newData: List<FavoriteUserEntity> ->
             result.value = Result.Success(newData)
         }
         return result
-    }
-
-    fun isFavorited(username: String): LiveData<Result<FavoriteUserEntity>> {
-        val localData = favoriteUserDao.getOneFavoriteUser(username)
-        userFavorited.addSource(localData) { newData ->
-            userFavorited.value = Result.Success(newData)
-        }
-        return userFavorited
     }
 
     fun setFavoriteUser(user: FavoriteUserEntity) {
