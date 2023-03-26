@@ -109,7 +109,10 @@ class FavoriteUserActivity : AppCompatActivity() {
             val item = UserResponseItem(login = it.username, avatarUrl = it.avatarUrl ?: "", htmlUrl = it.htmlUrl, url = it.url)
             items.add(item)
         }
-        val listUserAdapter = ListUserAdapter(items)
+        val listUserAdapter = ListUserAdapter()
+        listUserAdapter.setListUser(items)
+
+        rvUser.setHasFixedSize(true)
         rvUser.adapter = listUserAdapter
 
         listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {

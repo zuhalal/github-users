@@ -97,12 +97,12 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-//            if (githubUserViewModel.listUserResponse.value?.isEmpty() == true) {
-//                showNotFoundMessage(true)
-//            } else {
-//                showNotFoundMessage(false)
-//            }
         }
+    }
+
+    override fun onStart() {
+        binding.searchInput.text?.clear()
+        super.onStart()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -132,7 +132,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setListUserData(listUser: List<UserResponseItem>) {
         rvUser.layoutManager = LinearLayoutManager(this)
-        val listUserAdapter = ListUserAdapter(listUser)
+        rvUser.setHasFixedSize(true)
+
+        val listUserAdapter = ListUserAdapter()
+        listUserAdapter.setListUser(listUser)
+
         rvUser.adapter = listUserAdapter
 
         listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {

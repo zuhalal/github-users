@@ -82,7 +82,9 @@ class FollowerFragment : Fragment() {
 
     private fun setListUserData(listUser: List<UserResponseItem>) {
         rvUser.layoutManager = LinearLayoutManager(requireContext())
-        val listUserAdapter = ListUserAdapter(listUser)
+        rvUser.setHasFixedSize(true)
+        val listUserAdapter = ListUserAdapter()
+        listUserAdapter.setListUser(listUser)
         rvUser.adapter = listUserAdapter
 
         listUserAdapter.setOnItemClickCallback(object :

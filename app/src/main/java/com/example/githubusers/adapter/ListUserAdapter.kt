@@ -4,14 +4,25 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubusers.data.remote.models.UserResponseItem
 import com.example.githubusers.databinding.ItemRowUserBinding
 import com.example.githubusers.extensions.loadImage
+import com.example.githubusers.helper.UserDiffCallback
 
-class ListUserAdapter(private val listUser: List<UserResponseItem>) :
+class ListUserAdapter() :
     RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
+    private val listUser = ArrayList<UserResponseItem>()
     private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setListUser(listUser: List<UserResponseItem>) {
+        val diffCallback = UserDiffCallback(this.listUser, listUser)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        this.listUser.clear()
+        this.listUser.addAll(listUser)
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     interface OnItemClickCallback {
         fun onItemClicked(data: UserResponseItem, index: Int)
