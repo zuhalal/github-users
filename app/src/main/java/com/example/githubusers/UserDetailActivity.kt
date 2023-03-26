@@ -82,6 +82,32 @@ class UserDetailActivity : AppCompatActivity() {
                 }
             }
 
+            githubUserViewModel.findAllFavoriteUser().observe(this) { result ->
+                if (result != null) {
+                    when (result) {
+                        is Result.Loading -> {}
+                        is Result.Success -> {
+                            val data = result.data
+                            isFavorited =
+                                data.find { it.username == user.login }?.username !== null
+
+                            if (!isFavorited) {
+                                btnFav.text = getString(R.string.favorite_this_user)
+                            } else {
+                                btnFav.text = getString(R.string.unfavorite_this_user)
+                            }
+                        }
+                        is Result.Error -> {
+                            Toast.makeText(
+                                this,
+                                "Terjadi kesalahan" + result.error,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+            }
+
             btn.setOnClickListener {
                 val openURL = Intent(Intent.ACTION_SEND)
                 openURL.putExtra(Intent.EXTRA_TEXT, userDetail.htmlUrl)
