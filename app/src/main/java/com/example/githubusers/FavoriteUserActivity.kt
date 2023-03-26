@@ -76,7 +76,6 @@ class FavoriteUserActivity : AppCompatActivity() {
 
         binding.btnSend.setOnClickListener { view ->
             if (binding.searchInput.text.toString() != "") {
-
                 val filtered = data.filter {
                     binding.searchInput.text.toString().lowercase() in it.username.lowercase()
                 }

@@ -57,55 +57,21 @@ class UserDetailActivity : AppCompatActivity() {
         }
 
         if (userUrl != null) {
+            showLoading(true)
             githubUserViewModel.findUserByUrl(userUrl).observe(this) { result ->
                 if (result != null) {
                     when (result) {
                         is Result.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
+                            showLoading(true)
                         }
                         is Result.Success -> {
-                            binding.progressBar.visibility = View.GONE
-                            val newsData = result.data
-                            userDetail = newsData
-                            setUserDetailData(newsData)
+                            showLoading(false)
+                            val data = result.data
+                            userDetail = data
+                            setUserDetailData(data)
                         }
                         is Result.Error -> {
-                            binding.progressBar.visibility = View.GONE
-                            Toast.makeText(
-                                this,
-                                "Terjadi kesalahan" + result.error,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
-            }
-
-
-            githubUserViewModel.isLoading.observe(this) {
-                showLoading(it)
-            }
-
-            githubUserViewModel.findAllFavoriteUser().observe(this) { result ->
-                if (result != null) {
-                    when (result) {
-                        is Result.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                        }
-                        is Result.Success -> {
-                            binding.progressBar.visibility = View.GONE
-                            val newsData = result.data
-                            isFavorited =
-                                newsData.find { it.username == user.login }?.username !== null
-
-                            if (!isFavorited) {
-                                btnFav.text = getString(R.string.favorite_this_user)
-                            } else {
-                                btnFav.text = getString(R.string.unfavorite_this_user)
-                            }
-                        }
-                        is Result.Error -> {
-                            binding.progressBar.visibility = View.GONE
+                            showLoading(false)
                             Toast.makeText(
                                 this,
                                 "Terjadi kesalahan" + result.error,
@@ -155,6 +121,8 @@ class UserDetailActivity : AppCompatActivity() {
                 tab.text = resources.getString(TAB_TITLES[position])
             }.attach()
             supportActionBar?.elevation = 0f
+        } else {
+            showLoading(true)
         }
     }
 

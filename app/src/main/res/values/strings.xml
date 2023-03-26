@@ -26,4 +26,5 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="setting">Setting</string>
     <string name="by_zuhal_alimul_hadi">By: Zuhal \'Alimul Hadi</string>
+    <string name="error_msg">Terjadi kesalahan, silakan coba lagi nanti</string>
 </resources>

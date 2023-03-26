@@ -37,10 +37,6 @@ class MainActivity : AppCompatActivity() {
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
         val darkModeViewModel: DarkModeViewModel by viewModels { factory }
 
-        githubUserViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
-
         darkModeViewModel.getThemeSettings().observe(
             this
         ) { isDarkModeActive: Boolean ->
@@ -55,14 +51,25 @@ class MainActivity : AppCompatActivity() {
             if (binding.searchInput.text.toString() != "") {
                 githubUserViewModel.findUser(binding.searchInput.text.toString()).observe(this) {
                     when (it) {
+                        is Result.Loading -> {
+                            showLoading(true)
+                        }
                         is Result.Success -> {
+                            showLoading(false)
                             if (it.data.isEmpty()) {
                                 showNotFoundMessage(true)
                             } else {
                                 showNotFoundMessage(false)
                             }
                         }
-                        else -> {}
+                        is Result.Error -> {
+                            showLoading(false)
+                            Toast.makeText(
+                                this,
+                                R.string.error_msg,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -79,19 +86,19 @@ class MainActivity : AppCompatActivity() {
             if (result != null) {
                 when (result) {
                     is Result.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
+                        showLoading(true)
                     }
                     is Result.Success -> {
-                        binding.progressBar.visibility = View.GONE
+                        showLoading(false)
                         val data = result.data
 
                         setListUserData(data)
                     }
                     is Result.Error -> {
-                        binding.progressBar.visibility = View.GONE
+                        showLoading(false)
                         Toast.makeText(
                             this,
-                            "Terjadi kesalahan " + result.error,
+                            R.string.error_msg,
                             Toast.LENGTH_SHORT
                         ).show()
                     }

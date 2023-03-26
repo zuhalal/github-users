@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.githubusers.R
 import com.example.githubusers.adapter.ListUserAdapter
 import com.example.githubusers.databinding.FragmentFollowerBinding
 import com.example.githubusers.data.remote.models.UserResponseItem
@@ -18,7 +19,6 @@ import com.example.githubusers.data.Result
 
 class FollowerFragment : Fragment() {
     private lateinit var rvUser: RecyclerView
-
     private lateinit var binding: FragmentFollowerBinding
 
     override fun onCreateView(
@@ -47,30 +47,23 @@ class FollowerFragment : Fragment() {
                         if (result != null) {
                             when (result) {
                                 is Result.Loading -> {
-                                    binding.progressBar.visibility = View.VISIBLE
+                                    showLoading(true)
                                 }
                                 is Result.Success -> {
-                                    binding.progressBar.visibility = View.GONE
+                                    showLoading(false)
                                     val data = result.data
 
                                     setListUserData(data)
 
                                     if (data.isNotEmpty()) {
-                                        if (data.size > 3) {
-                                            binding.rvUserFollower.minimumHeight = 1000
-                                        }
                                         showNotFoundMessage(false)
                                     } else {
                                         showNotFoundMessage(true)
                                     }
                                 }
                                 is Result.Error -> {
-                                    binding.progressBar.visibility = View.GONE
-                                    Toast.makeText(
-                                        activity,
-                                        "Terjadi kesalahan " + result.error,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    showLoading(false)
+                                    showErrorMessage()
                                 }
                             }
                         }
@@ -81,39 +74,27 @@ class FollowerFragment : Fragment() {
                         if (result != null) {
                             when (result) {
                                 is Result.Loading -> {
-                                    binding.progressBar.visibility = View.VISIBLE
+                                    showLoading(true)
                                 }
                                 is Result.Success -> {
-                                    binding.progressBar.visibility = View.GONE
+                                    showLoading(false)
                                     val data = result.data
 
                                     setListUserData(data)
-
                                     if (data.isNotEmpty()) {
-                                        if (data.size > 3) {
-                                            binding.rvUserFollower.minimumHeight = 1000
-                                        }
                                         showNotFoundMessage(false)
                                     } else {
                                         showNotFoundMessage(true)
                                     }
                                 }
                                 is Result.Error -> {
-                                    binding.progressBar.visibility = View.GONE
-                                    Toast.makeText(
-                                        activity,
-                                        "Terjadi kesalahan " + result.error,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    showLoading(false)
+                                    showErrorMessage()
                                 }
                             }
                         }
                     }
             }
-        }
-
-        githubUserViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
         }
     }
 
@@ -137,9 +118,17 @@ class FollowerFragment : Fragment() {
             .show()
     }
 
+    private fun showErrorMessage() {
+        Toast.makeText(
+            activity,
+            getString(R.string.error_msg),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.progressBarFollower.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun showNotFoundMessage(show: Boolean) {

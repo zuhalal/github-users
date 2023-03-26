@@ -148,6 +148,7 @@ class GithubUserRepository private constructor(
     }
 
     fun getFavoriteUser(): LiveData<Result<List<FavoriteUserEntity>>> {
+        result.value = Result.Loading
         val localData = favoriteUserDao.getFavoriteUsers()
         result.addSource(localData) { newData: List<FavoriteUserEntity> ->
             result.value = Result.Success(newData)
