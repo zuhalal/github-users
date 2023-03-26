@@ -15,9 +15,6 @@ data class UserDetail(
     @field:SerializedName("company")
     val company: String? = null,
 
-    @field:SerializedName("id")
-    val id: Int? = null,
-
     @field:SerializedName("followers_url")
     val followersUrl: String? = null,
 

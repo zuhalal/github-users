@@ -48,29 +48,32 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnSend.setOnClickListener { view ->
             if (binding.searchInput.text.toString() != "") {
-                githubUserViewModel.findUser(binding.searchInput.text.toString()).observe(this) {
-                    when (it) {
-                        is Result.Loading -> {
-                            showLoading(true)
-                        }
-                        is Result.Success -> {
-                            showLoading(false)
-                            if (it.data.isEmpty()) {
-                                showNotFoundMessage(true)
-                            } else {
-                                showNotFoundMessage(false)
+                githubUserViewModel.findUser(binding.searchInput.text.toString())
+                    .observe(this) { result ->
+                        if (result != null) {
+                            when (result) {
+                                is Result.Loading -> {
+                                    showLoading(true)
+                                }
+                                is Result.Success -> {
+                                    showLoading(false)
+                                    if (result.data.isEmpty()) {
+                                        showNotFoundMessage(true)
+                                    } else {
+                                        showNotFoundMessage(false)
+                                    }
+                                }
+                                is Result.Error -> {
+                                    showLoading(false)
+                                    Toast.makeText(
+                                        this,
+                                        "${getString(R.string.mistake)} ${result.error}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
                         }
-                        is Result.Error -> {
-                            showLoading(false)
-                            Toast.makeText(
-                                this,
-                                R.string.error_msg,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
                     }
-                }
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
             } else {
@@ -97,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                         showLoading(false)
                         Toast.makeText(
                             this,
-                            R.string.error_msg,
+                            "${getString(R.string.mistake)} ${result.error}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -157,7 +160,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showSelectedUser(user: UserResponseItem) {
-        Toast.makeText(this, "You choose " + user.login, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "${getString(R.string.choose)} ${user.login}", Toast.LENGTH_SHORT)
+            .show()
     }
 
     private fun showLoading(isLoading: Boolean) {

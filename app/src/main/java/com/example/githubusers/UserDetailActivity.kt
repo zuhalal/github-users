@@ -35,12 +35,12 @@ class UserDetailActivity : AppCompatActivity() {
 
         val user = intent.getParcelableExtra<UserResponseItem>(EXTRA_USER)
         val userUrl = user?.url
-        var isFavorited = false
+        var isFavorite = false
         val btnFav: Button = binding.btnFavorite
         val btn: Button = binding.btnShare
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = user?.login ?: "Detail"
+        supportActionBar?.title = user?.login ?: getString(R.string.detail)
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
@@ -74,7 +74,7 @@ class UserDetailActivity : AppCompatActivity() {
                             showLoading(false)
                             Toast.makeText(
                                 this,
-                                "Terjadi kesalahan" + result.error,
+                                "${getString(R.string.mistake)} ${result.error}",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -88,10 +88,10 @@ class UserDetailActivity : AppCompatActivity() {
                         is Result.Loading -> {}
                         is Result.Success -> {
                             val data = result.data
-                            isFavorited =
+                            isFavorite =
                                 data.find { it.username == user.login }?.username !== null
 
-                            if (!isFavorited) {
+                            if (!isFavorite) {
                                 btnFav.text = getString(R.string.favorite_this_user)
                             } else {
                                 btnFav.text = getString(R.string.unfavorite_this_user)
@@ -100,7 +100,7 @@ class UserDetailActivity : AppCompatActivity() {
                         is Result.Error -> {
                             Toast.makeText(
                                 this,
-                                "Terjadi kesalahan" + result.error,
+                                "${getString(R.string.mistake)} ${result.error}",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -118,7 +118,7 @@ class UserDetailActivity : AppCompatActivity() {
             }
 
             btnFav.setOnClickListener {
-                if (!isFavorited) {
+                if (!isFavorite) {
                     githubUserViewModel.setFavoriteUser(
                         FavoriteUserEntity(
                             user.login,

@@ -27,4 +27,7 @@
     <string name="setting">Setting</string>
     <string name="by_zuhal_alimul_hadi">By: Zuhal \'Alimul Hadi</string>
     <string name="error_msg">Terjadi kesalahan, silakan coba lagi nanti</string>
+    <string name="detail">Detail</string>
+    <string name="choose">You choose</string>
+    <string name="mistake">Terjadi kesalahan</string>
 </resources>

@@ -65,7 +65,7 @@ class FavoriteUserActivity : AppCompatActivity() {
                         binding.progressBar.visibility = View.GONE
                         Toast.makeText(
                             this,
-                            "Terjadi kesalahan" + result.error,
+                            "${getString(R.string.mistake)} ${result.error}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -132,7 +132,8 @@ class FavoriteUserActivity : AppCompatActivity() {
     }
 
     private fun showSelectedUser(user: UserResponseItem) {
-        Toast.makeText(this, "You choose " + user.login, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "${getString(R.string.choose)} ${user.login}", Toast.LENGTH_SHORT)
+            .show()
     }
 
     private fun showNotFoundMessage(show: Boolean) {
