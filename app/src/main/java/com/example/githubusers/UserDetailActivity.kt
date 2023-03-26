@@ -33,6 +33,15 @@ class UserDetailActivity : AppCompatActivity() {
         binding = ActivityUserDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val user = intent.getParcelableExtra<UserResponseItem>(EXTRA_USER)
+        val userUrl = user?.url
+        var isFavorited = false
+        val btnFav: Button = binding.btnFavorite
+        val btn: Button = binding.btnShare
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = user?.login ?: "Detail"
+
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
         val darkModeViewModel: DarkModeViewModel by viewModels { factory }
@@ -45,14 +54,6 @@ class UserDetailActivity : AppCompatActivity() {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         }
-
-        val user = intent.getParcelableExtra<UserResponseItem>(EXTRA_USER)
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = user?.login ?: "Detail"
-
-        val userUrl = user?.url
-        var isFavorited = false
 
         if (userUrl != null) {
             githubUserViewModel.findUserByUrl(userUrl).observe(this) { result ->
@@ -79,7 +80,6 @@ class UserDetailActivity : AppCompatActivity() {
                 }
         }
 
-        val btnFav: Button = binding.btnFavorite
 
         githubUserViewModel.isLoading.observe(this) {
             showLoading(it)
@@ -114,7 +114,6 @@ class UserDetailActivity : AppCompatActivity() {
             }
         }
 
-        val btn: Button = binding.btnShare
         btn.setOnClickListener {
             val openURL = Intent(Intent.ACTION_SEND)
             openURL.putExtra(Intent.EXTRA_TEXT, userDetail.htmlUrl)
@@ -123,7 +122,6 @@ class UserDetailActivity : AppCompatActivity() {
             val shareIntent = Intent.createChooser(openURL, null)
             startActivity(shareIntent)
         }
-
 
         btnFav.setOnClickListener {
             if (!isFavorited) {
@@ -166,7 +164,6 @@ class UserDetailActivity : AppCompatActivity() {
     private fun setUserDetailData(user: UserDetail) {
         binding.apply {
             Glide.with(applicationContext).load(user.avatarUrl).into(ivAvatar)
-
             tvName.text = user.name
             tvUsernameDetail.text = user.login
             tvCompanyDetail.text = user.company ?: "-"

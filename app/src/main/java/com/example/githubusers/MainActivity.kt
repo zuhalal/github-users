@@ -35,12 +35,11 @@ class MainActivity : AppCompatActivity() {
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
+        val darkModeViewModel: DarkModeViewModel by viewModels { factory }
 
         githubUserViewModel.isLoading.observe(this) {
             showLoading(it)
         }
-
-        val darkModeViewModel: DarkModeViewModel by viewModels { factory }
 
         darkModeViewModel.getThemeSettings().observe(this
         ) { isDarkModeActive: Boolean ->
