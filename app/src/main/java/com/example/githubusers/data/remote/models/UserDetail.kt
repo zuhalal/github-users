@@ -3,9 +3,6 @@ package com.example.githubusers.data.remote.models
 import com.google.gson.annotations.SerializedName
 
 data class UserDetail(
-    @field:SerializedName("repos_url")
-    val reposUrl: String? = null,
-
     @field:SerializedName("following_url")
     val followingUrl: String? = null,
 

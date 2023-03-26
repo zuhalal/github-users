@@ -164,7 +164,7 @@ class GithubUserRepository private constructor(
 
     fun removeFavoriteUser(username: String) {
         appExecutors.diskIO.execute {
-            favoriteUserDao.deleteFavoritedUser(username)
+            favoriteUserDao.deleteFavoriteUser(username)
         }
     }
 
