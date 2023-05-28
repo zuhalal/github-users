@@ -5,7 +5,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.githubusers.databinding.ActivitySplashScreenBinding
+import com.example.githubusers.viewmodels.DarkModeViewModel
+import com.example.githubusers.viewmodels.ViewModelFactory
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -13,7 +17,22 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
+        val darkModeViewModel: DarkModeViewModel by viewModels { factory }
+
+        darkModeViewModel.getThemeSettings().observe(
+            this
+        ) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+
+            setContentView(binding.root)
+        }
+
 
         // we used the postDelayed(Runnable, time) method
         // to send a message with a delayed time.

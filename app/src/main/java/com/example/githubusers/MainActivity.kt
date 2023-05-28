@@ -28,9 +28,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        rvUser = binding.rvUser
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val githubUserViewModel: GithubUserViewModel by viewModels { factory }
@@ -44,68 +41,71 @@ class MainActivity : AppCompatActivity() {
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
-        }
 
-        binding.btnSend.setOnClickListener { view ->
-            if (binding.searchInput.text.toString() != "") {
-                githubUserViewModel.findUser(binding.searchInput.text.toString())
-                    .observe(this) { result ->
-                        if (result != null) {
-                            when (result) {
-                                is Result.Loading -> {
-                                    showLoading(true)
-                                }
-                                is Result.Success -> {
-                                    showLoading(false)
-                                    if (result.data.isEmpty()) {
-                                        showNotFoundMessage(true)
-                                    } else {
-                                        showNotFoundMessage(false)
+            rvUser = binding.rvUser
+
+            binding.btnSend.setOnClickListener { view ->
+                if (binding.searchInput.text.toString() != "") {
+                    githubUserViewModel.findUser(binding.searchInput.text.toString())
+                        .observe(this) { result ->
+                            if (result != null) {
+                                when (result) {
+                                    is Result.Loading -> {
+                                        showLoading(true)
                                     }
-                                }
-                                is Result.Error -> {
-                                    showLoading(false)
-                                    Toast.makeText(
-                                        this,
-                                        "${getString(R.string.mistake)} ${result.error}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    is Result.Success -> {
+                                        showLoading(false)
+                                        if (result.data.isEmpty()) {
+                                            showNotFoundMessage(true)
+                                        } else {
+                                            showNotFoundMessage(false)
+                                        }
+                                    }
+                                    is Result.Error -> {
+                                        showLoading(false)
+                                        Toast.makeText(
+                                            this,
+                                            "${getString(R.string.mistake)} ${result.error}",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
                                 }
                             }
                         }
-                    }
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view.windowToken, 0)
-            } else {
-                showNotFoundMessage(false)
-                githubUserViewModel.findAllUser()
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view.windowToken, 0)
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view.windowToken, 0)
+                } else {
+                    showNotFoundMessage(false)
+                    githubUserViewModel.findAllUser()
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view.windowToken, 0)
+                }
             }
-        }
 
-        githubUserViewModel.findAllUser().observe(this) { result ->
-            if (result != null) {
-                when (result) {
-                    is Result.Loading -> {
-                        showLoading(true)
-                    }
-                    is Result.Success -> {
-                        showLoading(false)
-                        val data = result.data
+            githubUserViewModel.findAllUser().observe(this) { result ->
+                if (result != null) {
+                    when (result) {
+                        is Result.Loading -> {
+                            showLoading(true)
+                        }
+                        is Result.Success -> {
+                            showLoading(false)
+                            val data = result.data
 
-                        setListUserData(data)
-                    }
-                    is Result.Error -> {
-                        showLoading(false)
-                        Toast.makeText(
-                            this,
-                            "${getString(R.string.mistake)} ${result.error}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            setListUserData(data)
+                        }
+                        is Result.Error -> {
+                            showLoading(false)
+                            Toast.makeText(
+                                this,
+                                "${getString(R.string.mistake)} ${result.error}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }
+            setContentView(binding.root)
         }
     }
 
